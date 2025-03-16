@@ -70,7 +70,7 @@ function LoginSuggestion({ onClose, message = "complete this action" }) {
 
         <div className="flex justify-between gap-2">
           <Link
-            href="/auth/signin"
+            href="/auth/login"
             onClick={onClose}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex-1 text-center"
           >
