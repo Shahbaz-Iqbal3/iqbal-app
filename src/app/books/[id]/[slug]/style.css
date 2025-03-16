@@ -1,0 +1,17 @@
+.highlight {
+	border: 1px solid #fffb8f;
+	transition: border-color 0.5s ease;
+	border-radius: 4px;
+	animation: pulse-highlight 4s ease-in-out;
+	scroll-margin-top:30px;
+	scroll-padding-top: 30px;
+}
+
+@keyframes pulse-highlight {
+	0% {
+		border-color: #fffb8faa;
+	}
+	100% {
+		border-color: #fffb8f00;
+	}
+}
