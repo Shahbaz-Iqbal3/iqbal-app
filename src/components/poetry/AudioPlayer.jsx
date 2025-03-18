@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { Play, Pause, Volume2, VolumeX, Repeat } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Repeat, Maximize2, Minimize2 } from "lucide-react";
 
 const formatTime = (time) => {
 	const minutes = Math.floor(time / 60);
@@ -9,11 +9,9 @@ const formatTime = (time) => {
 };
 
 const AudioPlayer = ({ audioSrc, isPlayed, onPlayStateChange }) => {
-
 	const [isPlaying, setIsPlaying] = useState(isPlayed);
 	const [showPlayer, setShowPlayer] = useState(false);
 	const [volume, setVolume] = useState(() => {
-		// Initialize volume from localStorage
 		if (typeof window !== "undefined") {
 			const savedVolume = localStorage.getItem("audioVolume");
 			return savedVolume ? parseFloat(savedVolume) : 1;
@@ -28,10 +26,14 @@ const AudioPlayer = ({ audioSrc, isPlayed, onPlayStateChange }) => {
 	const [isSeeking, setIsSeeking] = useState(false);
 	const [isAdjustingVolume, setIsAdjustingVolume] = useState(false);
 	const [isRepeating, setIsRepeating] = useState(false);
+	const [isExpanded, setIsExpanded] = useState(false);
+	const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
 	const audioRef = useRef(null);
 	const progressBarRef = useRef(null);
 	const volumeBarRef = useRef(null);
+	const seekHandleRef = useRef(null);
+	const isDraggingRef = useRef(false);
 
 	useEffect(() => {
 		setIsPlaying(isPlayed);
@@ -39,8 +41,7 @@ const AudioPlayer = ({ audioSrc, isPlayed, onPlayStateChange }) => {
 	}, [isPlayed]);
 
 	const togglePlay = () => {
-		onPlayStateChange(isPlaying); // Send new state to parent
-
+		onPlayStateChange(isPlaying);
 		if (!audioRef.current) return;
 		if (isPlaying) {
 			audioRef.current.pause();
@@ -57,47 +58,92 @@ const AudioPlayer = ({ audioSrc, isPlayed, onPlayStateChange }) => {
 		}
 	};
 
-	const handleSeek = (e) => {
-		if (!audioRef.current || !progressBarRef.current) return;
+	const calculateProgress = (clientX) => {
+		if (!progressBarRef.current) return 0;
 		const rect = progressBarRef.current.getBoundingClientRect();
-		const clickX = e.clientX - rect.left;
-		const newProgress = (clickX / rect.width) * 100;
-		const newTime = (newProgress / 100) * duration;
-		setProgress(newProgress);
-		setCurrentTime(newTime);
-		if (!isSeeking) {
-			audioRef.current.currentTime = newTime;
-		}
+		const position = clientX - rect.left;
+		return Math.min(Math.max((position / rect.width) * 100, 0), 100);
 	};
 
-	const handleSeekStart = () => setIsSeeking(true);
-	const handleSeekEnd = () => {
+	const handleSeek = (e) => {
+		if (!audioRef.current || !progressBarRef.current) return;
+		
+		const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+		const newProgress = calculateProgress(clientX);
+		const newTime = (newProgress / 100) * duration;
+		
+		setProgress(newProgress);
+		setCurrentTime(newTime);
+		audioRef.current.currentTime = newTime;
+	};
+
+	const handleSeekStart = (e) => {
+		e.preventDefault();
+		isDraggingRef.current = true;
+		setIsSeeking(true);
+		handleSeek(e);
+	};
+
+	const handleSeekMove = (e) => {
+		if (!isDraggingRef.current) return;
+		e.preventDefault();
+		handleSeek(e);
+	};
+
+	const handleSeekEnd = (e) => {
+		if (!isDraggingRef.current) return;
+		e.preventDefault();
+		isDraggingRef.current = false;
 		setIsSeeking(false);
 		if (audioRef.current) {
 			audioRef.current.currentTime = (progress / 100) * duration;
 		}
 	};
 
+	// Add global event listeners for mouse/touch events
+	useEffect(() => {
+		const handleGlobalMouseMove = (e) => {
+			if (isDraggingRef.current) {
+				handleSeekMove(e);
+			}
+		};
+
+		const handleGlobalMouseUp = (e) => {
+			if (isDraggingRef.current) {
+				handleSeekEnd(e);
+			}
+		};
+
+		window.addEventListener('mousemove', handleGlobalMouseMove);
+		window.addEventListener('mouseup', handleGlobalMouseUp);
+		window.addEventListener('touchmove', handleGlobalMouseMove, { passive: false });
+		window.addEventListener('touchend', handleGlobalMouseUp);
+
+		return () => {
+			window.removeEventListener('mousemove', handleGlobalMouseMove);
+			window.removeEventListener('mouseup', handleGlobalMouseUp);
+			window.removeEventListener('touchmove', handleGlobalMouseMove);
+			window.removeEventListener('touchend', handleGlobalMouseUp);
+		};
+	}, [progress, duration]);
+
 	const handleVolumeChange = (e) => {
 		if (!audioRef.current || !volumeBarRef.current) return;
 		const rect = volumeBarRef.current.getBoundingClientRect();
-		const clickX = e.clientX - rect.left;
-		const newVolume = Math.min(Math.max(clickX / rect.width, 0), 1);
-
+		const clickX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+		const newVolume = Math.min(Math.max((clickX - rect.left) / rect.width, 0), 1);
 		audioRef.current.volume = newVolume;
 		setVolume(newVolume);
-		// Save volume to localStorage
 		localStorage.setItem("audioVolume", newVolume);
 	};
+
 	const toggleVolume = () => {
 		if (audioRef.current) {
 			if (volume > 0) {
-				// Store current volume before muting
 				localStorage.setItem("audioVolume", volume);
 				audioRef.current.volume = 0;
 				setVolume(0);
 			} else {
-				// Retrieve stored volume or use default 1
 				const savedVolume = parseFloat(localStorage.getItem("audioVolume")) || 1;
 				audioRef.current.volume = savedVolume;
 				setVolume(savedVolume);
@@ -142,25 +188,45 @@ const AudioPlayer = ({ audioSrc, isPlayed, onPlayStateChange }) => {
 		};
 	}, [isSeeking]);
 
+	// Add this new useEffect for initial volume setup
+	useEffect(() => {
+		if (audioRef.current) {
+			const savedVolume = localStorage.getItem("audioVolume");
+			const initialVolume = savedVolume ? parseFloat(savedVolume) : 1;
+			audioRef.current.volume = initialVolume;
+			setVolume(initialVolume);
+		}
+	}, [audioRef.current]); // Only run when audio element is available
+
 	return (
 		<div className="p-4">
-			{showPlayer &&
-				(isLoading ? (
+			{showPlayer && (
+				isLoading ? (
 					<div className="text-white">Loading audio...</div>
 				) : (
-					<div className="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-4 flex items-center space-x-4 z-[500]">
-						<button onClick={togglePlay} className="p-2">
-							{isPlaying ? <Pause size={24} /> : <Play size={24} />}
-						</button>
-						<div className="flex w-full items-center justify-center gap-2">
-							<span className="text-sm">{formatTime(currentTime)}</span>
+					<div 
+						className={`fixed bottom-0 left-0 w-full bg-gray-900 text-white transition-all duration-300 ease-in-out z-[500] ${
+							isExpanded ? 'h-32' : 'h-20'
+						}`}
+					>
+						<div className="p-4">
+							<div className="flex items-center justify-between mb-2">
+								<button 
+									onClick={() => setIsExpanded(!isExpanded)}
+									className="p-2 hover:bg-gray-800 rounded-full"
+								>
+									{isExpanded ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+								</button>
+								<div className="text-sm font-medium">
+									{formatTime(currentTime)} / {formatTime(duration)}
+								</div>
+							</div>
 
 							<div
-								className="relative w-full h-1 bg-gray-700 rounded-full cursor-pointer"
+								className="relative w-full h-1 bg-gray-700 rounded-full cursor-pointer touch-none select-none"
 								ref={progressBarRef}
 								onMouseDown={handleSeekStart}
-								onMouseUp={handleSeekEnd}
-								onMouseMove={(e) => isSeeking && handleSeek(e)}
+								onTouchStart={handleSeekStart}
 								onClick={handleSeek}
 							>
 								<div
@@ -171,40 +237,62 @@ const AudioPlayer = ({ audioSrc, isPlayed, onPlayStateChange }) => {
 									className="absolute top-0 left-0 h-1 bg-blue-500 rounded-full"
 									style={{ width: `${progress}%` }}
 								>
-									<div className="absolute top-[-4px] left-[calc(100%-6px)] w-3 h-3 bg-blue-500 rounded-full"></div>
+									<div
+										ref={seekHandleRef}
+										className="absolute top-[-4px] left-[calc(100%-6px)] w-3 h-3 bg-blue-500 rounded-full "
+									></div>
 								</div>
 							</div>
 
-							<span className="text-sm">{formatTime(duration)}</span>
-						</div>
+							<div className="flex items-center justify-between mt-4">
+								<div className="flex items-center space-x-4">
+									<button 
+										onClick={togglePlay} 
+										className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+									>
+										{isPlaying ? <Pause size={20} /> : <Play size={20} />}
+									</button>
+									<button
+										onClick={toggleRepeat}
+										className={`p-2 hover:bg-gray-800 rounded-full ${isRepeating ? "text-blue-500" : ""}`}
+									>
+										<Repeat size={20} />
+									</button>
+								</div>
 
-						<button onClick={toggleVolume} className="p-2">
-							{volume > 0 ? <Volume2 size={24} /> : <VolumeX size={24} />}
-						</button>
-
-						<div
-							className="relative w-24 h-1 bg-gray-700 rounded-full cursor-pointer"
-							ref={volumeBarRef}
-							onMouseDown={handleVolumeStart}
-							onMouseUp={handleVolumeEnd}
-							onMouseMove={(e) => isAdjustingVolume && handleVolumeChange(e)}
-							onClick={handleVolumeChange}
-						>
-							<div
-								className="absolute top-0 left-0 h-1 bg-blue-500 rounded-full"
-								style={{ width: `${volume * 100}%` }}
-							>
-								<div className="absolute top-[-4px] left-[calc(100%-6px)] w-3 h-3 bg-blue-500  rounded-full"></div>
+								<div className="flex items-center space-x-2">
+									<button 
+										onClick={toggleVolume} 
+										className="p-2 hover:bg-gray-800 rounded-full"
+									>
+										{volume > 0 ? <Volume2 size={20} /> : <VolumeX size={20} />}
+									</button>
+									{isExpanded && (
+										<div
+											className="relative w-24 h-1 bg-gray-700 rounded-full cursor-pointer touch-none"
+											ref={volumeBarRef}
+											onMouseDown={handleVolumeStart}
+											onMouseUp={handleVolumeEnd}
+											onMouseMove={(e) => isAdjustingVolume && handleVolumeChange(e)}
+											onClick={handleVolumeChange}
+											onTouchStart={handleVolumeStart}
+											onTouchMove={(e) => isAdjustingVolume && handleVolumeChange(e)}
+											onTouchEnd={handleVolumeEnd}
+										>
+											<div
+												className="absolute top-0 left-0 h-1 bg-blue-500 rounded-full"
+												style={{ width: `${volume * 100}%` }}
+											>
+												<div className="absolute top-[-4px] left-[calc(100%-6px)] w-3 h-3 bg-blue-500 rounded-full"></div>
+											</div>
+										</div>
+									)}
+								</div>
 							</div>
 						</div>
-						<button
-							onClick={toggleRepeat}
-							className={`p-2 ${isRepeating ? "text-blue-500" : ""}`}
-						>
-							<Repeat size={24} />
-						</button>
 					</div>
-				))}
+				)
+			)}
 
 			<audio
 				ref={audioRef}

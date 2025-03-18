@@ -16,10 +16,10 @@ export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId,
 		<div className="sm:py-12 py-8 border-b border-gray-200 dark:border-gray-700 flex sm:flex-row-reverse flex-col items-center transition-colors duration-300">
 			<div className="w-full px-3">
 				<div className="flex flex-col">
-					<p className="sm:text-3xl text-lg text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full">
+					<p className="sm:text-3xl text-xl text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full">
 						{Urdu[0]}
 					</p>
-					<p className="sm:text-3xl text-lg text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full">
+					<p className="sm:text-3xl text-xl text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full">
 						{Urdu[1]}
 					</p>
 				</div>

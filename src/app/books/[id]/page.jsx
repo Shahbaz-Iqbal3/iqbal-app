@@ -38,12 +38,12 @@ const filteredPoems = bookContents.filter(poem => {
 	}, [id]);
 
 	return (
-		<div className="w-full bg-gray-600 min-h-svh">
-			<div className="mx-auto container bg-gray-700 text-white m-6 p-6 rounded-lg shadow-lg flex  items-end">
+		<div className="w-full md:bg-gray-600 min-h-svh">
+			<div className="mx-auto container md:bg-gray-700 text-white m-6 p-6 rounded-lg md:shadow-lg flex  items-end">
 				{loading ? (
 					<div>Loading...</div>
 				) : (
-					<>
+					<div className="flex flex-col md:flex-row">
 						<div className="flex flex-col justify-center overflow-hidden rounded-xl h-[400px] w-[300px]">
 							<Image
 								src={book.cover_image_url}
@@ -53,7 +53,7 @@ const filteredPoems = bookContents.filter(poem => {
 								priority={true}
 							/>
 						</div>
-						<div className="w-1/2 flex flex-col justify-center p-6 mb-8">
+						<div className="w-full md:w-1/2 flex flex-col justify-center p-6 mb-8">
 							<h2 className="text-2xl font-bold">
 								{book.title_en} <span className=" font-urdu">({book.title_ur})</span>
 							</h2>
@@ -68,7 +68,7 @@ const filteredPoems = bookContents.filter(poem => {
 								<p className="">Number of poems: {bookContents.length}</p>
 							</div>
 						</div>
-					</>
+					</div>
 				)}
 			</div>
 			<div className="mx-auto container bg-gray-700 text-white m-6 p-6 rounded-lg shadow-lg flex  items-end">

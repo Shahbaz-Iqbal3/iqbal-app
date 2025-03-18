@@ -89,7 +89,7 @@ export default function BookmarkButton({
 					{showLoginSuggestion && (
 						<LoginSuggestion
 							onClose={() => setShowLoginSuggestion(false)}
-							message="Sign in to save bookmarks"
+							message="save bookmarks"
 						/>
 					)}
 				</button>

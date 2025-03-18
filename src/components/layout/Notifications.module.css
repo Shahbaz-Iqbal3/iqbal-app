@@ -36,17 +36,17 @@
   
   /* Type-specific styles */
   .success { 
-    border: 1px solid #4CAF50; 
-    --icon-color: #4CAF50;
+    border: 1px solid #4caf4fd3; 
+    --icon-color: #4caf4fd3;
   }
   
   .error { 
-    border: 1px solid #f44336; 
-    --icon-color: #f44336;
+    border: 1px solid #f44336be; 
+    --icon-color: #f44336be;
   }
   
   .info { 
-    border: 1px solid #2196F3; 
-    --icon-color: #2196F3;
+    border: 1px solid #2195f3be; 
+    --icon-color: #2195f3be;
   }
   

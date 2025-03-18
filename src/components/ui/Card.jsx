@@ -6,7 +6,7 @@ const Card = ({ image, link, className }) => {
 	return (
 		<Link href={link}>
 			<div
-				className={`card rounded-lg shadow-lg overflow-hidden w-[300px] h-[420px] border-white ${className}`}
+				className={`card rounded-lg shadow-lg overflow-hidden w-[300px] h-[420px] border-white ${className} hover:scale-[1.02] transition-all duration-300`}
 			>
 				<Image
 					src={image}

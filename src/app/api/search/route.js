@@ -181,7 +181,7 @@ export async function GET(req) {
       }
       
       // Search in stanzas with proper relationships
-      let stanzaQuery = supabase.from("stanzas").select("*, poem_details(book_id, title_en, title_ur)");
+      let stanzaQuery = supabase.from("stanzas").select("*, poem_details(title_en, title_ur)");
       let stanzaCountQuery = supabase.from("stanzas").select("id", { count: "exact" });
       
       // Apply FTS search to stanzas
@@ -297,14 +297,6 @@ export async function GET(req) {
    
     }
 
-    // Get available books for filtering
-    const { data: availableBooks, error: booksError } = await supabase
-      .from("books")
-      .select("id, title_en, title_ur");
-      
-    if (booksError) {
-      console.error("Error fetching books:", booksError);
-    }
 
     return NextResponse.json({
       results,

@@ -41,7 +41,7 @@ function LoginSuggestion({ onClose, message = "complete this action" }) {
       className="absolute left-0  z-20 mt-2"
       tabIndex={-1}
     >
-      <div className="bg-white rounded-lg shadow-md p-4 mx-auto w-[240px]">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-4 mx-auto w-[240px] border border-gray-300 dark:border-gray-400">
         <div className="flex items-center mb-3">
           <div className="bg-blue-100 p-2 rounded-full mr-3">
             <svg
@@ -59,16 +59,16 @@ function LoginSuggestion({ onClose, message = "complete this action" }) {
               />
             </svg>
           </div>
-          <h3 id="login-heading" className="text-lg font-semibold text-gray-800">
+          <h3 id="login-heading" className="text-lg font-semibold text-gray-800 dark:text-gray-100">
             Login Required
           </h3>
         </div>
 
-        <p id="login-description" className="text-gray-600 mb-4">
+        <p id="login-description" className="text-gray-600 dark:text-gray-100 mb-4">
           Please sign in or create an account to {message}.
         </p>
 
-        <div className="flex justify-between gap-2">
+        <div className="">
           <Link
             href="/auth/login"
             onClick={onClose}
