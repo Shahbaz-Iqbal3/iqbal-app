@@ -119,7 +119,7 @@ const PoemPage = () => {
 					poemId={poem.id}
 					initialBookmarked={initialPoemBookmarked}
 				/>
-				<PlayButton isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+				<PlayButton isPlaying={isPlaying} setIsPlaying={setIsPlaying} disabled={poem.audio_url==='' && !poem.audio_url} />
 				<CopyButton content={poem} />
 				<ShareButton book={id} poem={poem.title_en} />
 				<CommentsPopup poemId={poem.id} />
@@ -156,11 +156,13 @@ const PoemPage = () => {
 				))}
 			</div>
 			<div className="flex flex-col items-center justify-center mt-6 mb-4">
-				<AudioPlayer
-					audioSrc={poem.audio_url}
-					isPlayed={!isPlaying}
-					onPlayStateChange={handlePlayStateChange}
-				/>
+				{poem.audio_url && (
+					<AudioPlayer
+						audioSrc={poem.audio_url}
+						isPlayed={!isPlaying}
+						onPlayStateChange={handlePlayStateChange}
+					/>
+				)}
 			</div>
 		</div>
 	);

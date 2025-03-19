@@ -3,12 +3,14 @@ import CommentsPopup from "./CommentButton";
 import CopyButton from "./CopyPoemButton";
 import ShareButton from "./ShareButton";
 
-
 export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId, poemName }) {
-	const [ur, en, ro] = [stanza.content_ur, stanza.content_en, stanza.content_ro];
+	const ur = stanza.content_ur;
+	const en = stanza.content_en || "";
+	const ro = stanza.content_ro || "";
+
 	const Urdu = ur.split("|");
-	const English = en.split("|");
-	const Romanian = ro.split("|");
+	const English = en ? en.split("|") : [];
+	const Romanian = ro ? ro.split("|") : [];
 
 	const initialBookmarked = bookmarks?.some((b) => b.stanza_id === stanza.id);
 
@@ -16,21 +18,39 @@ export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId,
 		<div className="sm:py-12 py-8 border-b border-gray-200 dark:border-gray-700 flex sm:flex-row-reverse flex-col items-center transition-colors duration-300">
 			<div className="w-full px-3">
 				<div className="flex flex-col">
-					<p className="sm:text-3xl text-xl text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full">
-						{Urdu[0]}
-					</p>
-					<p className="sm:text-3xl text-xl text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full">
-						{Urdu[1]}
-					</p>
+					{Urdu.map((line, index) => (
+						<p
+							key={index}
+							className="sm:text-3xl text-xl text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full"
+						>
+							{line}
+						</p>
+					))}
 				</div>
-				<div className="flex flex-col mb-2">
-					<p className="sm:text-lg text-sm text-gray-700 dark:text-gray-200 mt-2">{English[0]}</p>
-					<p className="sm:text-lg text-sm text-gray-700 dark:text-gray-200">{English[1]}</p>
-				</div>
-				<div>
-					<p className="sm:text-base text-xs text-gray-600 dark:text-gray-400 italic">{Romanian[0]}</p>
-					<p className="sm:text-base text-xs text-gray-600 dark:text-gray-400 italic">{Romanian[1]}</p>
-				</div>
+				{English.length > 0 && (
+					<div className="flex flex-col mb-2">
+						{English.map((line, index) => (
+							<p
+								key={index}
+								className="sm:text-lg text-sm text-gray-700 dark:text-gray-200 mt-2"
+							>
+								{line}
+							</p>
+						))}
+					</div>
+				)}
+				{Romanian.length > 0 && (
+					<div>
+						{Romanian.map((line, index) => (
+							<p
+								key={index}
+								className="sm:text-base text-xs text-gray-600 dark:text-gray-400 italic"
+							>
+								{line}
+							</p>
+						))}
+					</div>
+				)}
 			</div>
 
 			<div className="mt-3 flex sm:flex-col items-center justify-start gap-5 sm:w-1/12 text-gray-500 dark:text-gray-400">
@@ -39,7 +59,7 @@ export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId,
 					poemId={poemId}
 					stanzaId={stanza.id}
 					initialBookmarked={initialBookmarked}
-					isLogin={!userId ? true : false}
+					isLogin={!userId}
 				/>
 				<button
 					className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
@@ -67,14 +87,10 @@ export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId,
 					book={bookId}
 					poem={poemName}
 					stanzaId={stanza.stanza_order}
-					shareText={ur
-						.split("|")
-						.map((part) => part.trim())
-						.join("\n")}
+					shareText={Urdu.join("\n")}
 				/>
 				<CommentsPopup poemId={poemId} stanzaId={stanza.id} />
 			</div>
 		</div>
 	);
 }
-

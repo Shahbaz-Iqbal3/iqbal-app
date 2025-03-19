@@ -1,16 +1,17 @@
 import React from "react";
 import Tooltip from "../layout/Tooltip";
 
-function PlayButton({ isPlaying, setIsPlaying }) {
+function PlayButton({ isPlaying, setIsPlaying , disabled }) {
 	return (
-		<Tooltip content={isPlaying? "Play" : "Pause"}>
+		<Tooltip content={disabled ? "No audio available" : isPlaying? "Play" : "Pause"}>
 		<button
 			className=" p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
 			onClick={() => {
 				setIsPlaying(!isPlaying);
 			}}
+			disabled={disabled}
 		>
-			{isPlaying ? (
+			{disabled || isPlaying ? (
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
