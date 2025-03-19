@@ -110,6 +110,35 @@ const SuggestionIcon = memo(({ type }) => {
   }
 });
 
+// Move useLanguageClass outside of render method
+const SuggestionItem = memo(({ suggestion, onSuggestionClick }) => {
+  const languageClass = useLanguageClass(suggestion.text || '', suggestion.language);
+  const bookTitle = suggestion.type === 'poem' && suggestion.book_id
+    ? DEFAULT_BOOKS.find(book => book.id === suggestion.book_id)?.title_en
+    : null;
+
+  return (
+    <li 
+      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+      onClick={() => onSuggestionClick(suggestion)}
+    >
+      <div className="flex items-center gap-2">
+        <SuggestionIcon type={suggestion.type} />
+        <div className="flex flex-col">
+          <span className={`text-gray-800 dark:text-gray-200 line-clamp-1 capitalize ${languageClass}`}>
+            {(suggestion.text || '').toLowerCase()}
+          </span>
+          {bookTitle && (
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              from {bookTitle}
+            </span>
+          )}
+        </div>
+      </div>
+    </li>
+  );
+});
+
 // SearchSuggestions component
 const SearchSuggestions = memo(({ 
   isLoading,
@@ -120,14 +149,20 @@ const SearchSuggestions = memo(({
   onRecentSearchClick,
   onRemoveSearch,
   onClearSearches,
-  suggestionsRef
+  suggestionsRef,
+  isMobile
 }) => {
   if (!suggestionsRef) return null;
   
   return (
     <div 
       ref={suggestionsRef}
-      className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700 max-h-80 overflow-y-auto"
+      className={`
+        absolute left-0 right-0 bg-white dark:bg-gray-800 shadow-lg z-50 
+        border border-gray-200 dark:border-gray-700 overflow-y-auto
+        ${isMobile ? 'fixed top-[60px] max-h-[calc(100vh-120px)]' : 'top-full mt-1 max-h-80'} 
+        rounded-md
+      `}
     >
       {/* Loading state */}
       {isLoading && query.length >= 2 && (
@@ -227,40 +262,16 @@ const RecentSearchesList = memo(({ searches, onSearchClick, onRemoveSearch, onCl
   </>
 ));
 
-// Suggestions list component
+// Update SuggestionsList to use the new SuggestionItem component
 const SuggestionsList = memo(({ suggestions, onSuggestionClick }) => (
   <ul className="py-1">
-    {suggestions.map((suggestion, index) => {
-      // Get the book title for poem suggestions
-      const bookTitle = suggestion.type === 'poem' && suggestion.book_id
-        ? DEFAULT_BOOKS.find(book => book.id === suggestion.book_id)?.title_en
-        : null;
-
-      // Get appropriate language class
-      const languageClass = useLanguageClass(suggestion.text, suggestion.language);
-
-      return (
-        <li 
-          key={`${suggestion.type}-${index}`}
-          className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-          onClick={() => onSuggestionClick(suggestion)}
-        >
-          <div className="flex items-center gap-2">
-            <SuggestionIcon type={suggestion.type} />
-            <div className="flex flex-col">
-              <span className={`text-gray-800 dark:text-gray-200 line-clamp-1 capitalize ${languageClass}`}>
-                {suggestion.text.toLowerCase()}
-              </span>
-              {bookTitle && (
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  from {bookTitle}
-                </span>
-              )}
-            </div>
-          </div>
-        </li>
-      );
-    })}
+    {suggestions.map((suggestion, index) => (
+      <SuggestionItem
+        key={`${suggestion.type}-${index}`}
+        suggestion={suggestion}
+        onSuggestionClick={onSuggestionClick}
+      />
+    ))}
   </ul>
 ));
 
@@ -309,28 +320,33 @@ const NavbarSearch = () => {
   
   // Update suggestions visibility based on focus state and query
   useEffect(() => {
-    // Only show suggestions when input is focused
-    if (inputFocused) {
-      if (query.length >= 2 && suggestions.length > 0) {
-        // Show query-based suggestions
-        setShowSuggestions(true);
-      } else if (!query && recentSearches.length > 0) {
-        // Show recent searches when no query
-        setShowSuggestions(true);
-      } else if (query.length >= 2 && !loading) {
-        // Show "no results" message
-        setShowSuggestions(true);
-      } else if (!query && recentSearches.length === 0) {
-        // Show "no recent searches" message
-        setShowSuggestions(true);
-      } else {
-        setShowSuggestions(false);
-      }
+    // Don't show suggestions during navigation timeout
+    if (navigationTimeoutRef.current) {
+      setShowSuggestions(false);
+      return;
+    }
+
+    // Don't show suggestions if not focused
+    if (!inputFocused) {
+      setShowSuggestions(false);
+      return;
+    }
+
+    // Show loading state
+    if (loading && query.length >= 2) {
+      setShowSuggestions(true);
+      return;
+    }
+
+    // Show suggestions based on conditions
+    if (query.length >= 2) {
+      setShowSuggestions(true);
+    } else if (!query && recentSearches.length > 0) {
+      setShowSuggestions(true);
     } else {
-      // Always hide suggestions when input is not focused
       setShowSuggestions(false);
     }
-  }, [inputFocused, query, suggestions.length, loading, recentSearches.length]);
+  }, [inputFocused, query, loading, recentSearches.length, navigationTimeoutRef.current]);
   
   // Handle URL parameter changes
   useEffect(() => {
@@ -392,17 +408,19 @@ const NavbarSearch = () => {
   // Handle clicks outside the search component
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Collapse search on mobile (except on search page)
       if (
         searchContainerRef.current && 
-        !searchContainerRef.current.contains(event.target) && 
-        expanded &&
-        isMobile &&
-        !isSearchPage
+        !searchContainerRef.current.contains(event.target)
       ) {
-        setExpanded(false);
-        setQuery('');
+        // Always hide suggestions on outside click
         setShowSuggestions(false);
+        setInputFocused(false);
+
+        // Only collapse search on mobile (except on search page)
+        if (expanded && isMobile && !isSearchPage) {
+          setExpanded(false);
+          setQuery('');
+        }
       }
     };
     
@@ -600,13 +618,13 @@ const NavbarSearch = () => {
   }, [searchParams, pathname, router]);
 
   const handleInputBlur = useCallback(() => {
-    // Use a short delay to allow clicks on suggestion items to register
+    // Use a shorter delay for better responsiveness
     setTimeout(() => {
-      // Only hide if focus hasn't moved to the suggestions container
       if (!suggestionsRef.current?.contains(document.activeElement)) {
         setInputFocused(false);
+        setShowSuggestions(false);
       }
-    }, 150);
+    }, 100);
   }, []);
 
   const clearQuery = useCallback(() => {
@@ -679,6 +697,7 @@ const NavbarSearch = () => {
                 onRemoveSearch={handleRemoveSearch}
                 onClearSearches={handleClearSearches}
                 suggestionsRef={suggestionsRef}
+                isMobile={isMobile}
               />
             )}
           </form>
