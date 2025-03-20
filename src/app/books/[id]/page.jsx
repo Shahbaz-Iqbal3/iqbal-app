@@ -62,14 +62,14 @@ const ErrorDisplay = ({ message }) => (
 
 // PoemCard component for better code organization
 const PoemCard = ({ poem, book }) => (
-	<div className="group bg-gradient-to-br from-gray-800 to-gray-850 rounded-lg overflow-hidden  transition-all duration-300 flex flex-col h-full border border-gray-700/50 hover:shadow-md hover:shadow-blue-900/50  ">
+	<div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden transition-all duration-300 flex flex-col h-full border border-gray-200 dark:border-gray-700/50 hover:shadow-md hover:shadow-blue-900/50">
 		<div className="relative overflow">
 			{/* Order number badge */}
 			<div className="absolute top-3 left-3 z-10">
-				<div className="bg-gray-900/80 backdrop-blur-sm text-blue-400 rounded-lg px-4 w-7 h-7 flex justify-center items-center font-medium text-sm border border-gray-700/50 shadow-sm">
+				<div className="bg-gray-100 dark:bg-gray-900/80 backdrop-blur-sm text-blue-600 dark:text-blue-400 rounded-lg px-4 w-7 h-7 flex justify-center items-center font-medium text-sm border border-gray-200 dark:border-gray-700/50 shadow-sm">
 					{poem.content_order}
 				</div>
-				<div className="bg-gray-900/80 backdrop-blur-sm text-blue-400 rounded-lg px-4 w-7 h-7 flex justify-center items-center font-medium text-sm border border-gray-700/50 shadow-sm group-hover:opacity-100 opacity-0 transition-opacity absolute inset-0 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none">
+				<div className="bg-gray-100 dark:bg-gray-900/80 backdrop-blur-sm text-blue-600 dark:text-blue-400 rounded-lg px-4 w-7 h-7 flex justify-center items-center font-medium text-sm border border-gray-200 dark:border-gray-700/50 shadow-sm group-hover:opacity-100 opacity-0 transition-opacity absolute inset-0 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none">
 					↗
 				</div>
 			</div>
@@ -80,17 +80,17 @@ const PoemCard = ({ poem, book }) => (
 		>
 			{/* Main heading */}
 			<div className="">
-				<h3 className="text-xl font-urdu leading-[3] pr-2 line-clamp-1 min-h-[4rem]" dir="rtl">
+				<h3 className="text-xl font-urdu leading-[3] pr-2 line-clamp-1 min-h-[4rem] text-gray-900 dark:text-white" dir="rtl">
 					{poem.title_ur || "عنوان موجود نہیں"}
 				</h3>
 			</div>
-			<p className="text-gray-300 font-medium  line-clamp-1  capitalize">
+			<p className="text-gray-600 dark:text-gray-300 font-medium line-clamp-1 capitalize">
 				{poem.title_en.toLowerCase() || "Title not available"}
 			</p>
 		</Link>
 
 		{/* Interactive hover effect */}
-		<div className="group-hover:opacity-100 opacity-0 transition-opacity absolute inset-0 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none"></div>
+		<div className="group-hover:opacity-100 opacity-0 transition-opacity absolute inset-0 bg-gradient-to-b  dark:from-blue-900/10 to-transparent pointer-events-none"></div>
 	</div>
 );
 
@@ -160,7 +160,7 @@ const BookDetails = () => {
 				<meta name="twitter:card" content="summary_large_image" />
 			</Head>
 
-			<main className="bg-gradient-to-b from-gray-900 to-gray-800 min-h-screen text-gray-100">
+			<main className="bg-gray-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 min-h-screen text-gray-900 dark:text-gray-100">
 				<div className="container mx-auto px-4 py-6 max-w-6xl">
 					{/* Error state */}
 					{error && <ErrorDisplay message={error} />}
@@ -172,23 +172,23 @@ const BookDetails = () => {
 						!error && (
 							<>
 								{/* Book details section */}
-								<section className="bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-8">
+								<section className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-8">
 									<div className="flex flex-col md:flex-row">
 										{/* Book cover with responsive sizing */}
 										<div className="relative w-full md:w-auto">
-											<div className="md:h-[400px] md:w-[300px] h-[250px] relative">
+											<div className="md:h-[400px] md:w-[300px] h-[500px] relative">
 												{book.cover_image_url ? (
 													<Image
 														src={book.cover_image_url}
 														alt={book.title_en || "Book cover"}
 														fill
 														sizes="(max-width: 768px) 100vw, 300px"
-														className="object-cover"
+														className="md:object-cover object-contain "
 														priority={true}
 														quality={80}
 													/>
 												) : (
-													<div className="w-full h-full bg-gray-700 flex items-center justify-center">
+													<div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
 														<span className="text-gray-500">No cover image</span>
 													</div>
 												)}
@@ -197,25 +197,25 @@ const BookDetails = () => {
 
 										{/* Book details */}
 										<div className="flex-1 p-6">
-											<h1 className="text-3xl font-bold mb-2 tracking-tight text-gray-300">
+											<h1 className="text-3xl font-bold mb-2 tracking-tight text-gray-900 dark:text-gray-300">
 												{book.title_ur && (
-													<span className="font-urdu block  mb-3">({book.title_ur})</span>
+													<span className="font-urdu block mb-3">({book.title_ur})</span>
 												)}
 												{book.title_en}
 											</h1>
 
 											<div className="flex flex-wrap gap-2 mt-4">
-												<span className="px-3 py-1 bg-gray-700 rounded-full text-sm">
+												<span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm text-gray-700 dark:text-gray-300">
 													{book.book_lang || "Unknown language"}
 												</span>
-												<span className="px-3 py-1 bg-gray-700 rounded-full text-sm">
+												<span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm text-gray-700 dark:text-gray-300">
 													{bookContents.length} poems
 												</span>
 											</div>
 
 											<div className="mt-6">
-												<h2 className="text-xl font-semibold mb-2">About this collection</h2>
-												<p className="text-gray-300 leading-relaxed">
+												<h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">About this collection</h2>
+												<p className="text-gray-600 dark:text-gray-300 leading-relaxed">
 													{book.description || "No description available for this book."}
 												</p>
 											</div>
@@ -224,15 +224,15 @@ const BookDetails = () => {
 								</section>
 
 								{/* Poems section with search and filters */}
-								<section className="bg-gray-800 rounded-xl shadow-lg p-6">
+								<section className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
 									<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-										<h2 className="text-2xl font-bold">Poems</h2>
+										<h2 className="text-2xl font-bold text-gray-900 dark:text-white">Poems</h2>
 
 										<div className="relative w-full md:w-64">
 											<input
 												type="text"
 												placeholder="Search poems..."
-												className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 pl-10"
+												className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 pl-10"
 												value={searchQuery}
 												onChange={(e) => setSearchQuery(e.target.value)}
 												aria-label="Search poems"
@@ -264,7 +264,7 @@ const BookDetails = () => {
 									) : (
 										<div className="py-12 text-center">
 											<svg
-												className="mx-auto h-12 w-12 text-gray-500 mb-4"
+												className="mx-auto h-12 w-12 text-gray-400 mb-4"
 												fill="none"
 												viewBox="0 0 24 24"
 												stroke="currentColor"
@@ -276,14 +276,14 @@ const BookDetails = () => {
 													d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
 												/>
 											</svg>
-											<h3 className="text-xl font-medium text-gray-400">No poems found</h3>
+											<h3 className="text-xl font-medium text-gray-600 dark:text-gray-400">No poems found</h3>
 											<p className="text-gray-500 mt-2">
 												Try adjusting your search or filters
 											</p>
 											{searchQuery && (
 												<button
 													onClick={() => setSearchQuery("")}
-													className="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+													className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
 												>
 													Clear search
 												</button>
