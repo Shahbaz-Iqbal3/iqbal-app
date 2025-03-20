@@ -282,7 +282,7 @@ const NavbarSearch = () => {
   const pathname = usePathname();
   const isSearchPage = pathname === '/search';
   const initialQuery = searchParams.get('query') || searchParams.get('q') || '';
-  
+
   // UI state
   const [expanded, setExpanded] = useState(isSearchPage || !!initialQuery);
   const [isMobile, setIsMobile] = useState(false);
@@ -305,7 +305,7 @@ const NavbarSearch = () => {
   
   // Custom hooks
   const { recentSearches, addSearch, removeSearch, clearSearches } = useRecentSearches(10);
-  
+
   // Hide suggestions on navigation
   useEffect(() => {
     setShowSuggestions(false);
@@ -361,7 +361,7 @@ const NavbarSearch = () => {
       }
     } else {
       // Keep suggestions hidden when selected=true
-      setShowSuggestions(false);
+    setShowSuggestions(false);
     }
     
     // Expand search on search page (mobile only)
@@ -399,7 +399,7 @@ const NavbarSearch = () => {
       // Use a short delay to avoid focus during navigation
       setTimeout(() => {
         if (inputRef.current) {
-          inputRef.current.focus();
+      inputRef.current.focus();
         }
       }, 100);
     }
@@ -580,7 +580,7 @@ const NavbarSearch = () => {
       if (!expanded && inputRef.current) {
         setTimeout(() => {
           if (inputRef.current) {
-            inputRef.current.focus();
+          inputRef.current.focus();
           }
         }, 150);
       }
@@ -682,7 +682,7 @@ const NavbarSearch = () => {
               className="p-2 px-6 rounded-e-full border-s-[1px] dark:border-gray-500 border-gray-300 text-primary-500 dark:text-primary-400 hover:bg-slate-200 bg-slate-100 dark:bg-gray-600"
               aria-label="Submit search"
             >
-              <Search size={18} />
+               <Search size={18} />
             </button>
             
             {/* Suggestions dropdown */}

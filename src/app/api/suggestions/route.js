@@ -166,7 +166,7 @@ export async function GET(request) {
           }
         }
         
-        return {
+      return {
           text: bestMatch || '',
           type: 'poem',
           id: poem.id,
@@ -271,15 +271,15 @@ export async function GET(request) {
         const contentField = bestMatch || '';
         const contentPreview = contentField.split('|')[0].substring(0, 50) + 
                              (contentField.length > 50 ? '...' : '');
-        
-        return {
-          text: contentPreview,
-          type: 'content',
+      
+      return {
+        text: contentPreview,
+        type: 'content',
           id: stanza.id,
           poem_id: stanza.poem_id,
           language: bestLanguage,
           matchScore: bestScore
-        };
+      };
       })
       .filter(content => content.text) // Filter out empty content
       .sort((a, b) => b.matchScore - a.matchScore) // Sort by match score
