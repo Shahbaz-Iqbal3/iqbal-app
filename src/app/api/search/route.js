@@ -181,7 +181,7 @@ export async function GET(req) {
       }
       
       // Search in stanzas with proper relationships
-      let stanzaQuery = supabase.from("stanzas").select("*, poem_details(title_en, title_ur)");
+      let stanzaQuery = supabase.from("stanzas").select("*, poem_details(title_en, title_ur, book_id)");
       let stanzaCountQuery = supabase.from("stanzas").select("id", { count: "exact" });
       
       // Apply FTS search to stanzas

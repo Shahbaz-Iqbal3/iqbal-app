@@ -7,7 +7,7 @@ import { NotificationProvider } from "./contexts/NotificationContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SessionProvider } from "@/components";
 import { ThemeScript } from "@/components/layout/ThemeScript";
-
+import CookieConsent from "@/components/ui/CookieConsent";
 
 const nastaliq = Noto_Nastaliq_Urdu({ subsets: ["arabic"], variable: "--font-nastaliq" });
 const gulzar = IBM_Plex_Sans_Arabic({
@@ -20,7 +20,6 @@ export const metadata = {
 	title: "Sir Muhammad Iqbal - Poetry & Philosophy",
 	description: "Exploring the poetry and philosophy of Sir Muhammad Iqbal",
 };
-
 
 export default async function RootLayout({ children }) {
 	return (
@@ -37,6 +36,7 @@ export default async function RootLayout({ children }) {
 								{children}
 								<Notifications />
 								<Footer />
+								<CookieConsent />
 							</main>
 						</NotificationProvider>
 					</SessionProvider>

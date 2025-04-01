@@ -3,7 +3,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import Head from "next/head";
 import { Suspense } from "react";
 
 // Loading skeleton component
@@ -108,12 +107,12 @@ const BookDetails = () => {
 		if (!bookContents?.length) return [];
 
 		return bookContents.filter((poem) => {
-			const searchLower = searchQuery.toLowerCase();
-			return (
-				poem.title_ur?.toLowerCase().includes(searchLower) ||
-				poem.title_en?.toLowerCase().includes(searchLower)
-			);
-		});
+  const searchLower = searchQuery.toLowerCase();
+  return (
+    poem.title_ur?.toLowerCase().includes(searchLower) ||
+    poem.title_en?.toLowerCase().includes(searchLower)
+  );
+}); 
 	}, [bookContents, searchQuery]);
 
 	// Fetch book data
@@ -142,24 +141,10 @@ const BookDetails = () => {
 		fetchBookContents();
 	}, [id]);
 
-	// For SEO
-	const pageTitle = book?.title_en ? `${book.title_en} | Poetry Collection` : "Book Details";
-	const pageDescription = book?.description || "Explore this beautiful collection of poems";
-
 	const poemsToDisplay = filteredPoems();
 
 	return (
 		<>
-			{/* SEO Metadata */}
-			<Head>
-				<title>{pageTitle}</title>
-				<meta name="description" content={pageDescription} />
-				<meta property="og:title" content={pageTitle} />
-				<meta property="og:description" content={pageDescription} />
-				{book?.cover_image_url && <meta property="og:image" content={book.cover_image_url} />}
-				<meta name="twitter:card" content="summary_large_image" />
-			</Head>
-
 			<main className="bg-gray-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 min-h-screen text-gray-900 dark:text-gray-100">
 				<div className="container mx-auto px-4 py-6 max-w-6xl">
 					{/* Error state */}
@@ -173,18 +158,18 @@ const BookDetails = () => {
 							<>
 								{/* Book details section */}
 								<section className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-8">
-									<div className="flex flex-col md:flex-row">
+					<div className="flex flex-col md:flex-row">
 										{/* Book cover with responsive sizing */}
 										<div className="relative w-full md:w-auto">
 											<div className="md:h-[400px] md:w-[300px] h-[500px] relative">
 												{book.cover_image_url ? (
-													<Image
-														src={book.cover_image_url}
+							<Image
+								src={book.cover_image_url}
 														alt={book.title_en || "Book cover"}
 														fill
 														sizes="(max-width: 768px) 100vw, 300px"
 														className="md:object-cover object-contain "
-														priority={true}
+								priority={true}
 														quality={80}
 													/>
 												) : (
@@ -211,16 +196,16 @@ const BookDetails = () => {
 												<span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm text-gray-700 dark:text-gray-300">
 													{bookContents.length} poems
 												</span>
-											</div>
+						</div>
 
 											<div className="mt-6">
 												<h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">About this collection</h2>
 												<p className="text-gray-600 dark:text-gray-300 leading-relaxed">
 													{book.description || "No description available for this book."}
 												</p>
-											</div>
-										</div>
-									</div>
+							</div>
+						</div>
+					</div>
 								</section>
 
 								{/* Poems section with search and filters */}
@@ -229,12 +214,12 @@ const BookDetails = () => {
 										<h2 className="text-2xl font-bold text-gray-900 dark:text-white">Poems</h2>
 
 										<div className="relative w-full md:w-64">
-											<input
-												type="text"
-												placeholder="Search poems..."
+					<input
+					  type="text"
+					  placeholder="Search poems..."
 												className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 pl-10"
-												value={searchQuery}
-												onChange={(e) => setSearchQuery(e.target.value)}
+					  value={searchQuery}
+					  onChange={(e) => setSearchQuery(e.target.value)}
 												aria-label="Search poems"
 											/>
 											<svg
@@ -251,16 +236,16 @@ const BookDetails = () => {
 													d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
 												/>
 											</svg>
-										</div>
-									</div>
-
+				  </div>
+				</div>
+			
 									{/* Poems grid */}
 									{poemsToDisplay.length > 0 ? (
 										<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 											{poemsToDisplay.map((poem) => (
 												<PoemCard key={poem.id} poem={poem} book={book} />
 											))}
-										</div>
+					  </div>
 									) : (
 										<div className="py-12 text-center">
 											<svg
@@ -288,12 +273,12 @@ const BookDetails = () => {
 													Clear search
 												</button>
 											)}
-										</div>
+					</div>
 									)}
 								</section>
 							</>
 						)
-					)}
+				  )}
 				</div>
 			</main>
 		</>

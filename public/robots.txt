@@ -1,0 +1,16 @@
+# Allow all crawlers for public pages
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /contact
+Allow: /books/*
+Allow: /search
+
+# Disallow private and sensitive routes
+Disallow: /auth/*
+Disallow: /admin/*
+Disallow: /user/*
+Disallow: /api/*
+
+# Sitemap location
+Sitemap: https://iqbalapp.vercel.app/sitemap.xml 

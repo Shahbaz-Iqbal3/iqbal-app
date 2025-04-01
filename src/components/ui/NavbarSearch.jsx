@@ -120,7 +120,7 @@ const SuggestionItem = memo(({ suggestion, onSuggestionClick }) => {
   return (
     <li 
       className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-      onClick={() => onSuggestionClick(suggestion)}
+      onClick={(e) => onSuggestionClick(suggestion, e)}
     >
       <div className="flex items-center gap-2">
         <SuggestionIcon type={suggestion.type} />
@@ -501,37 +501,50 @@ const NavbarSearch = () => {
     }
   }, [query, addSearch, router, isMobile, isSearchPage]);
 
-  const handleSuggestionClick = useCallback((suggestion) => {
-    // Ensure suggestions are hidden immediately
-    setShowSuggestions(false);
-    setInputFocused(false);
+  const handleSuggestionClick = useCallback((suggestion, e) => {
+    // Prevent default form submission if event exists
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     
-    // Set navigation timeout to prevent immediate focus events
+    // Clear any existing navigation timeout
     if (navigationTimeoutRef.current) {
       clearTimeout(navigationTimeoutRef.current);
     }
-    navigationTimeoutRef.current = setTimeout(() => {
-      navigationTimeoutRef.current = null;
-    }, 500);
-    
+
+    // Update query state first
     setQuery(suggestion.text);
+    
+    // Add to recent searches
     addSearch(suggestion.text);
     
-    const encodedQuery = encodeURIComponent(suggestion.text);
-    const navigatingToSearchPage = suggestion.type !== 'book';
+    // Hide suggestions and reset focus state
+    setShowSuggestions(false);
+    setInputFocused(false);
     
-    // Navigate based on suggestion type
-    if (suggestion.type === 'book' && suggestion.id) {
-      router.push(`/books/${suggestion.text}`);
-    } else {
-      // All other types go to search page
-      router.push(`/search?q=${encodedQuery}&contentType=all&language=all&page=1&selected=true`);
-    }
-    
-    // Collapse on mobile if not going to search page
-    if (isMobile && !navigatingToSearchPage) {
-      setExpanded(false);
-    }
+    // Set a navigation timeout to prevent immediate focus events
+    navigationTimeoutRef.current = setTimeout(() => {
+      navigationTimeoutRef.current = null;
+      
+      // Determine the target URL based on suggestion type
+      const encodedQuery = encodeURIComponent(suggestion.text);
+      const targetUrl = suggestion.type === 'book' && suggestion.id
+        ? `/books/${suggestion.text}`
+        : `/search?q=${encodedQuery}&contentType=all&language=all&page=1&selected=true`;
+      
+      // Navigate to the target URL
+      router.push(targetUrl);
+      
+      // Handle mobile view collapse
+      if (isMobile) {
+        // Only collapse if not navigating to search page
+        const isNavigatingToSearch = targetUrl.startsWith('/search');
+        if (!isNavigatingToSearch) {
+          setExpanded(false);
+        }
+      }
+    }, 100); // Reduced timeout for better responsiveness
   }, [addSearch, router, isMobile]);
 
   const handleRecentSearchClick = useCallback((term) => {

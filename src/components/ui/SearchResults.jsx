@@ -136,7 +136,6 @@ export default function SearchResults() {
 					}
 
 					const data = await response.json();
-
 					// Update state with results
 					setResults(data.results || []);
 					setPagination(
