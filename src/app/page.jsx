@@ -16,7 +16,7 @@ export const metadata = {
 		images: ["/images/og-image.jpg"],
 	},
 	alternates: {
-		canonical: `${process.env.NEXT_PUBLIC_APP_URL}/about`,
+		canonical: `${process.env.NEXT_PUBLIC_APP_URL}/`,
 	},
 };
 
