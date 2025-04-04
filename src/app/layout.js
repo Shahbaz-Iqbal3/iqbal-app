@@ -52,6 +52,33 @@ export const metadata = {
 		],
 	},
 	manifest: '/favicon_io1/site.webmanifest',
+	openGraph: {
+		title: "Sir Muhammad Iqbal - Poetry & Philosophy",
+		description: "Exploring the poetry and philosophy of Sir Muhammad Iqbal",
+		images: [
+			{
+				url: '/images/og-image.jpg',
+				width: 1200,
+				height: 630,
+				alt: 'Sir Muhammad Iqbal - Poetry & Philosophy',
+			},
+		],
+		type: 'website',
+		siteName: 'Sir Muhammad Iqbal - Poetry & Philosophy',
+		locale: 'en_US',
+		url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Sir Muhammad Iqbal - Poetry & Philosophy",
+		description: "Exploring the poetry and philosophy of Sir Muhammad Iqbal",
+		images: ['/images/og-image.jpg'],
+		site: '@iqbalpoetry',
+		creator: '@iqbalpoetry',
+	},
+	alternates: {
+		canonical: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+	},
 };
 
 export default async function RootLayout({ children }) {

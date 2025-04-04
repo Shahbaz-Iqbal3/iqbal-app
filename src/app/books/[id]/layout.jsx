@@ -25,12 +25,21 @@ export async function generateMetadata({ params }) {
                 title: book.title_en ? `${book.title_en} | Poetry Collection` : "Book Details",
                 description: book.description || "Explore this beautiful collection of poems",
                 images: book.cover_image_url ? [book.cover_image_url] : [],
+                type: 'book',
+                siteName: 'Sir Muhammad Iqbal - Poetry & Philosophy',
+                locale: 'en_US',
+                url: `${baseUrl}/books/${id}`,
             },
             twitter: {
                 card: "summary_large_image",
                 title: book.title_en ? `${book.title_en} | Poetry Collection` : "Book Details",
                 description: book.description || "Explore this beautiful collection of poems",
                 images: book.cover_image_url ? [book.cover_image_url] : [],
+                site: '@iqbalpoetry',
+                creator: '@iqbalpoetry',
+            },
+            alternates: {
+                canonical: `${baseUrl}/books/${id}`,
             },
         };
     } catch (error) {

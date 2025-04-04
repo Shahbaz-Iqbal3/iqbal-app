@@ -36,12 +36,18 @@ export async function generateMetadata({ params }) {
                 title: poem.title_en ? `${poem.title_en.toProperCase()} | ${book.title_en.toProperCase() || 'Poetry Collection'}` : "Poem Details",
                 description: poem.stanzas?.[0]?.content_en || "Read this beautiful poem from our collection",
                 images: book.cover_image_url ? [book.cover_image_url] : [],
+                type: 'article',
+                siteName: 'Sir Muhammad Iqbal - Poetry & Philosophy',
+                locale: 'en_US',
+                url: `${baseUrl}/books/${id}/${slug}`,
             },
             twitter: {
                 card: "summary_large_image",
                 title: poem.title_en ? `${poem.title_en.toProperCase()} | ${book.title_en.toProperCase() || 'Poetry Collection'}` : "Poem Details",
                 description: poem.stanzas?.[0]?.content_en || "Read this beautiful poem from our collection",
                 images: book.cover_image_url ? [book.cover_image_url] : [],
+                site: '@iqbalpoetry',
+                creator: '@iqbalpoetry',
             },
             alternates: {
                 canonical: `${baseUrl}/books/${id}/${slug}`,
