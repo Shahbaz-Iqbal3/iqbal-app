@@ -11,4 +11,4 @@ Disallow: /hooks
 Disallow: /contexts
 
 # Sitemap
-Sitemap: http://localhost:3000/sitemap.xml
+Sitemap: http://drallamaiqbal.com/sitemap.xml

@@ -7,9 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:sitemap": "next-sitemap",
-    "postbuild": "next-sitemap",
-    "generate:sitemap": "node scripts/generate-sitemap.js"
+    "build:sitemap": "node scripts/generate-sitemap.js",
+    "postbuild": "node scripts/generate-sitemap.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",
