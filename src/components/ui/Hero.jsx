@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function Hero() {
 	const heroRef = useRef(null);
@@ -26,7 +27,7 @@ function Hero() {
 	return (
 		<div ref={heroRef} className="relative overflow-hidden">
 			{/* Background Pattern - Added explicit height and width to prevent layout shift */}
-			<div className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent dark:from-gray-800/20 dark:to-transparent" style={{ willChange: 'transform' }} />
+			<div className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent dark:from-gray-800/20 dark:to-transparent" style={{ willChange: 'transform', transform: 'translateZ(0)', backfaceVisibility: 'hidden' }} />
 			
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="relative pt-16 pb-20 sm:pt-24 sm:pb-24 lg:pb-32">
@@ -44,8 +45,8 @@ function Hero() {
 								</span>
 							</h1>
 
-							{/* Description with Modern Typography */}
-							<p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl">
+							{/* Description with Modern Typography - Pre-rendered to improve LCP */}
+							<p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 100px' }}>
 								Allama Iqbal was a visionary poet-philosopher who inspired millions through his powerful verses and philosophical insights. His work continues to illuminate paths of self-discovery and spiritual growth.
 							</p>
 
@@ -85,16 +86,19 @@ function Hero() {
 						{/* Image Section */}
 						<div className="relative lg:ml-auto fade-in-right">
 							<div className="relative w-full max-w-lg mx-auto h-[600px] sm:h-[700px]">
-								<img
+								<Image
 									src="https://ldqodmsyujkiftjmbich.supabase.co/storage/v1/object/public/images//Allama_Iqbal_-_3.avif"
 									alt="Allama Iqbal"
 									className="object-cover object-center rounded-2xl shadow-2xl"
 									sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+									width={600}
+									height={700}
+									priority
+									quality={90}
 									style={{
 										width: '100%',
 										height: '100%'
 									}}
-									
 								/>
 								{/* Decorative Elements */}
 								<div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl blur opacity-5 group-hover:opacity-30 transition duration-300" />
