@@ -1,16 +1,14 @@
-# Allow all crawlers for public pages
+# Allow all crawlers
 User-agent: *
 Allow: /
-Allow: /about
-Allow: /contact
-Allow: /books/*
-Allow: /search
 
-# Disallow private and sensitive routes
-Disallow: /auth/*
-Disallow: /admin/*
-Disallow: /user/*
-Disallow: /api/*
+# Disallow admin, user, and API routes
+Disallow: /admin
+Disallow: /user
+Disallow: /api
+Disallow: /auth
+Disallow: /hooks
+Disallow: /contexts
 
-# Sitemap location
-Sitemap: https://iqbalapp.vercel.app/sitemap.xml 
+# Sitemap
+Sitemap: http://localhost:3000/sitemap.xml
