@@ -16,7 +16,7 @@ export const metadata = {
 		images: ["/images/og-image.jpg"],
 	},
 	alternates: {
-		canonical: "https://your-domain.com",
+		canonical: `${process.env.NEXT_PUBLIC_APP_URL}/`,
 	},
 };
 
