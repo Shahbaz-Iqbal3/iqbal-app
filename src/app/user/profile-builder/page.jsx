@@ -361,8 +361,8 @@ export default function ProfileBuilderPage() {
 										priority
 									/>
 								) : (
-									<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900 dark:to-blue-800 text-blue-400 dark:text-blue-300">
-										<svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
+									<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900 dark:to-blue-800 text-blue-400 dark:text-blue-300" style={{ willChange: 'transform', transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}>
+										<svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
 											<path
 												fillRule="evenodd"
 												d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"

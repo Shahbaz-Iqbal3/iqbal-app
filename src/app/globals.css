@@ -19,6 +19,24 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Fix for layout shifts */
+/* Ensure images and other media have explicit dimensions */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent layout shifts for gradient backgrounds */
+[class*="bg-gradient"] {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Ensure absolute positioned elements don't cause layout shifts */
+
+
 /* Add to your global CSS */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }

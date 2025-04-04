@@ -6,22 +6,35 @@ import { useEffect, useState } from "react";
 const BooksPage = () => {
 	const [books, setBooks] = useState([]);
 	const [error, setError] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	// Fetch Books Data
 	const getData = async () => {
 		try {
+			setIsLoading(true);
 			const response = await fetch("/api/books");
 			if (!response.ok) throw new Error("Network response was not ok");
 			const data = await response.json();
 			setBooks(data.data);
 		} catch (error) {
 			setError(error.message);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	useEffect(() => {
 		getData();
 	}, []);
+
+	// Generate skeleton cards for loading state
+	const renderSkeletonCards = () => {
+		return Array(11).fill(0).map((_, index) => (
+			<div key={`skeleton-${index}`}>
+				<Card isLoading={true} />
+			</div>
+		));
+	};
 
 	return (
 		<div className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors">
@@ -31,11 +44,15 @@ const BooksPage = () => {
 					<p className="text-center text-red-500 dark:text-red-400">{error}</p>
 				) : (
 					<div className="flex container mx-auto mt-6 flex-wrap justify-center gap-5">
-						{books.map((book, index) => (
-							<div key={index}>
-								<Card image={book.cover_image_url} link={`/books/${book.title_en}`} />
-							</div>
-						))}
+						{isLoading ? (
+							renderSkeletonCards()
+						) : (
+							books.map((book, index) => (
+								<div key={index}>
+									<Card image={book.cover_image_url} link={`/books/${book.title_en}`} />
+								</div>
+							))
+						)}
 					</div>
 				)}
 			</div>

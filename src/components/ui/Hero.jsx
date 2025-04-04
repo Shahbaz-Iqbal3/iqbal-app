@@ -25,8 +25,8 @@ function Hero() {
 
 	return (
 		<div ref={heroRef} className="relative overflow-hidden">
-			{/* Background Pattern */}
-			<div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent dark:from-gray-800/20 dark:to-transparent" />
+			{/* Background Pattern - Added explicit height and width to prevent layout shift */}
+			<div className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent dark:from-gray-800/20 dark:to-transparent" style={{ willChange: 'transform' }} />
 			
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="relative pt-16 pb-20 sm:pt-24 sm:pb-24 lg:pb-32">
@@ -86,7 +86,7 @@ function Hero() {
 						<div className="relative lg:ml-auto fade-in-right">
 							<div className="relative w-full max-w-lg mx-auto h-[600px] sm:h-[700px]">
 								<img
-									src="/Allama_Iqbal_-_3.jpg"
+									src="https://ldqodmsyujkiftjmbich.supabase.co/storage/v1/object/public/images//Allama_Iqbal_-_3.avif"
 									alt="Allama Iqbal"
 									className="object-cover object-center rounded-2xl shadow-2xl"
 									sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -94,6 +94,7 @@ function Hero() {
 										width: '100%',
 										height: '100%'
 									}}
+									
 								/>
 								{/* Decorative Elements */}
 								<div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl blur opacity-5 group-hover:opacity-30 transition duration-300" />

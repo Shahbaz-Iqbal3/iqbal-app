@@ -30,8 +30,8 @@ const Navbar = () => {
 		<nav className="bg-white dark:bg-secondary-dark dark:text-white text-gray-700 shadow-sm py-4 px-2">
 			<div className="container mx-auto flex justify-between items-center">
 				<div className="text-lg font-semibold">
-					<Link href="/" className="hover:text-gray-500 dark:text-gray-200 transition duration-300">
-						Allama Iqbal
+					<Link href="/" className="hover:text-gray-500 dark:text-gray-200 transition duration-300 font-sans">
+						Dr Allama Iqbal
 					</Link>
 				</div>
 				

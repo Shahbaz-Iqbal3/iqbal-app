@@ -39,7 +39,7 @@ const EditProfile = ({
 								sizes="44"
 							/>
 						) : (
-							<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900 dark:to-blue-800 text-blue-400 dark:text-blue-300">
+							<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900 dark:to-blue-800 text-blue-400 dark:text-blue-300" style={{ willChange: 'transform', transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}>
 								<DefaultAvatarIcon />
 							</div>
 						)}
