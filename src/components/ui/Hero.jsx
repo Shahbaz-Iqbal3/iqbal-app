@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 function Hero() {
 	const heroRef = useRef(null);
+	const [imageLoaded, setImageLoaded] = useState(false);
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -55,12 +56,14 @@ function Hero() {
 								<Link 
 									href="/books"
 									className="px-8 py-3 flex justify-center items-center bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+									prefetch={true}
 								>
 									Explore His Works
 								</Link>
 								<Link 
 									href="/about"
 									className="px-8 py-3 bg-white dark:bg-gray-800 text-gray-800 dark:text-white border-2 border-gray-200 dark:border-gray-700 rounded-lg font-medium hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 transform hover:scale-105"
+									prefetch={true}
 								>
 									Learn More
 								</Link>
@@ -86,6 +89,15 @@ function Hero() {
 						{/* Image Section */}
 						<div className="relative lg:ml-auto fade-in-right">
 							<div className="relative w-full max-w-lg mx-auto h-[600px] sm:h-[700px]">
+								{/* Preload image with a hidden element to improve LCP */}
+								<link 
+									rel="preload" 
+									as="image" 
+									href="https://ldqodmsyujkiftjmbich.supabase.co/storage/v1/object/public/images//Allama_Iqbal_-_3.avif"
+									imageSrcSet="https://ldqodmsyujkiftjmbich.supabase.co/storage/v1/object/public/images//Allama_Iqbal_-_3.avif 1x, https://ldqodmsyujkiftjmbich.supabase.co/storage/v1/object/public/images//Allama_Iqbal_-_3.avif 2x"
+									imageSizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+								/>
+								
 								<Image
 									src="https://ldqodmsyujkiftjmbich.supabase.co/storage/v1/object/public/images//Allama_Iqbal_-_3.avif"
 									alt="Allama Iqbal"
@@ -95,11 +107,23 @@ function Hero() {
 									height={700}
 									priority
 									quality={90}
+									onLoad={() => setImageLoaded(true)}
 									style={{
 										width: '100%',
-										height: '100%'
+										height: '100%',
+										opacity: imageLoaded ? 1 : 0,
+										transition: 'opacity 0.3s ease-in-out'
 									}}
 								/>
+								
+								{/* Placeholder for image while loading */}
+								{!imageLoaded && (
+									<div 
+										className="absolute inset-0 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse"
+										style={{ width: '100%', height: '100%' }}
+									/>
+								)}
+								
 								{/* Decorative Elements */}
 								<div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl blur opacity-5 group-hover:opacity-30 transition duration-300" />
 								<div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl blur-lg opacity-5" />

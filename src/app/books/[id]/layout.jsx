@@ -6,7 +6,7 @@ export async function generateMetadata({ params }) {
         const { id } = await params;
         
         // Use absolute URL for server-side fetch
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
         const response = await fetch(`${baseUrl}/api/books/listofpoem?book_id=${id}`, {
             next: { revalidate: 3600 }, // Cache for 1 hour
         });
