@@ -17,6 +17,11 @@ export async function generateMetadata({ params }) {
 
         const data = await response.json();
         const book = data.book || {};
+        
+        // Create image array with fallback
+        const images = book.cover_image_url 
+            ? [book.cover_image_url, '/images/og-image.jpg'] 
+            : ['/images/og-image.jpg'];
 
         return {
             title: book.title_en ? `${book.title_en} | Poetry Collection` : "Book Details",
@@ -24,7 +29,7 @@ export async function generateMetadata({ params }) {
             openGraph: {
                 title: book.title_en ? `${book.title_en} | Poetry Collection` : "Book Details",
                 description: book.description || "Explore this beautiful collection of poems",
-                images: book.cover_image_url ? [book.cover_image_url] : [],
+                images: images,
                 type: 'book',
                 siteName: 'Sir Muhammad Iqbal - Poetry & Philosophy',
                 locale: 'en_US',
@@ -34,7 +39,7 @@ export async function generateMetadata({ params }) {
                 card: "summary_large_image",
                 title: book.title_en ? `${book.title_en} | Poetry Collection` : "Book Details",
                 description: book.description || "Explore this beautiful collection of poems",
-                images: book.cover_image_url ? [book.cover_image_url] : [],
+                images: images,
                 site: '@iqbalpoetry',
                 creator: '@iqbalpoetry',
             },
@@ -47,6 +52,23 @@ export async function generateMetadata({ params }) {
         return {
             title: "Book Details | Poetry Collection",
             description: "Explore this beautiful collection of poems",
+            openGraph: {
+                title: "Book Details | Poetry Collection",
+                description: "Explore this beautiful collection of poems",
+                images: ['/images/og-image.jpg'],
+                type: 'book',
+                siteName: 'Sir Muhammad Iqbal - Poetry & Philosophy',
+                locale: 'en_US',
+                url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+            },
+            twitter: {
+                card: "summary_large_image",
+                title: "Book Details | Poetry Collection",
+                description: "Explore this beautiful collection of poems",
+                images: ['/images/og-image.jpg'],
+                site: '@iqbalpoetry',
+                creator: '@iqbalpoetry',
+            },
         };
     }
 }
