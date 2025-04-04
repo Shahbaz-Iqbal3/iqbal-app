@@ -36,7 +36,7 @@ export const getItemLink = (item) => {
         const bookId = item.poem_details.book_id || "";
         const filteredBooks = DEFAULT_BOOKS.filter(book => book.id === bookId);
         const bookTitle = filteredBooks[0]?.title_en || "";
-        return `/books/${bookTitle}/${poemId}#stanza-${item.stanza_order}?selected=true`;
+        return `/books/${bookTitle}/${poemId}?selected=true#stanza-${item.stanza_order}`;
     }
     // For poems with stanzas
     else if (item.content_order) {
