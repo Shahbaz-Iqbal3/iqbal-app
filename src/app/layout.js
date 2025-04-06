@@ -1,5 +1,16 @@
 import "./globals.css";
-import { Noto_Nastaliq_Urdu, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { 
+	Noto_Nastaliq_Urdu, 
+	Amiri,
+	Lateef,
+	Poppins,
+	Dancing_Script,
+	Playfair_Display,
+	Lora,
+	Merriweather,
+	Roboto,
+	Open_Sans 
+} from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Notifications } from "@/components/layout/Notifications";
@@ -16,12 +27,68 @@ const nastaliq = Noto_Nastaliq_Urdu({
 	display: 'swap', // Use swap to prevent layout shifts
 	preload: true,
 });
-const gulzar = IBM_Plex_Sans_Arabic({
+
+const amiri = Amiri({
 	subsets: ["arabic"],
-	weight: ["400", "500", "600", "700"],
-	variable: "--font-gulzar",
+	weight: ["400", "700"],
+	variable: "--font-amiri",
 	display: 'swap', // Use swap to prevent layout shifts
 	preload: true,
+});
+
+const lateef = Lateef({
+	subsets: ["arabic"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-lateef",
+	display: 'swap', // Use swap to prevent layout shifts
+	preload: true,
+});
+
+// Poem generator fonts
+const poppins = Poppins({
+	subsets: ["latin"],
+	weight: ["300", "400", "500", "600", "700"],
+	variable: "--font-poppins",
+	display: 'swap',
+});
+
+const dancingScript = Dancing_Script({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-dancing",
+	display: 'swap',
+});
+
+const playfair = Playfair_Display({
+	subsets: ["latin"],
+	variable: "--font-playfair",
+	display: 'swap',
+});
+
+const lora = Lora({
+	subsets: ["latin"],
+	variable: "--font-lora",
+	display: 'swap',
+});
+
+const merriweather = Merriweather({
+	subsets: ["latin"],
+	weight: ["300", "400", "700", "900"],
+	variable: "--font-merriweather",
+	display: 'swap',
+});
+
+const roboto = Roboto({
+	subsets: ["latin"],
+	weight: ["100", "300", "400", "500", "700", "900"],
+	variable: "--font-roboto",
+	display: 'swap',
+});
+
+const openSans = Open_Sans({
+	subsets: ["latin"],
+	variable: "--font-opensans",
+	display: 'swap',
 });
 
 export const metadata = {
@@ -94,9 +161,16 @@ export default async function RootLayout({ children }) {
 					type="font/woff2"
 					crossOrigin="anonymous"
 				/>
+				<link 
+					rel="preload"
+					href={amiri.url}
+					as="font"
+					type="font/woff2"
+					crossOrigin="anonymous"
+				/>
 				<link
 					rel="preload"
-					href={gulzar.url}
+					href={lateef.url}
 					as="font"
 					type="font/woff2"
 					crossOrigin="anonymous"
@@ -113,7 +187,7 @@ export default async function RootLayout({ children }) {
 				<link rel="icon" type="image/png" sizes="192x192" href="/favicon_io1/android-chrome-192x192.png" />
 				<link rel="icon" type="image/png" sizes="512x512" href="/favicon_io1/android-chrome-512x512.png" />
 			</head>
-			<body className={`${nastaliq.variable} ${gulzar.variable} antialiased min-h-full bg-primary dark:bg-primary-dark`}>
+			<body className={`${nastaliq.variable} ${amiri.variable} ${lateef.variable} ${poppins.variable} ${dancingScript.variable} ${playfair.variable} ${lora.variable} ${merriweather.variable} ${roboto.variable} ${openSans.variable} antialiased min-h-full bg-primary dark:bg-primary-dark`}>
 				<ThemeProvider>
 					<SessionProvider>
 						<NotificationProvider>

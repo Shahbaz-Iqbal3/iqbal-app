@@ -190,9 +190,9 @@ const BookmarksSection = ({
 							</div>
 
 							<div className="flex justify-between flex-row-reverse gap-2 mb-2">
-								<h4 className="text-lg font-medium text-right mb-1 font-urdu text-gray-600 dark:text-white flex gap-2 items-center justify-start flex-row-reverse">
+								<h4 className="text-lg font-medium text-right mb-1 font-nastaliq text-gray-600 dark:text-white flex gap-2 items-center justify-start flex-row-reverse">
 									<span>{bookmark.poem_title || "Unknown Poem"}</span>
-									<span className="text-sm text-gray-600 dark:text-gray-400 text-right mb-3 font-urdu">
+									<span className="text-sm text-gray-600 dark:text-gray-400 text-right mb-3 font-nastaliq">
 										({bookmark.book_title || "Unknown Book"})
 									</span>
 								</h4>
@@ -224,11 +224,11 @@ const BookmarksSection = ({
 
 							{bookmark.type === "stanza" && bookmark.stanza_content && (
 								<div className="bg-gray-50 text-gray-600 dark:bg-gray-600 rounded p-2 mt-2">
-									<p className="text-center font-urdu mt-2 p-2 sm:text-lg text-sm  dark:text-white">
+									<p className="text-center font-nastaliq mt-2 p-2 sm:text-lg text-sm  dark:text-white">
 										{bookmark.stanza_content?.split("|")[0] || "Content not available"}
 									</p>
 									{bookmark.stanza_content?.split("|")[1] && (
-										<p className="text-center font-urdu mt-2 p-2 sm:text-lg text-sm dark:text-white">
+										<p className="text-center font-nastaliq mt-2 p-2 sm:text-lg text-sm dark:text-white">
 											{bookmark.stanza_content?.split("|")[1]}
 										</p>
 									)}

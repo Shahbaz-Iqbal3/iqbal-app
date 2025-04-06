@@ -1,3 +1,5 @@
+/* Import Urdu fonts */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -92,4 +94,25 @@ dialog[open] {
 @keyframes pulse-highlight {
   0% { border-color: #fffb8faa; }
   100% { border-color: #fffb8f00; }
+}
+
+/* Urdu text specific styles */
+.font-nastaliq {
+  font-family: var(--font-nastaliq);
+  line-height: 2.5; /* Increased line height for Nastaliq script */
+  direction: rtl;
+}
+
+.font-urdu-noto {
+  font-family: var(--font-urdu-noto);
+  line-height: 2;
+  direction: rtl;
+}
+
+/* Add specific styles for ShareVerseModal Urdu text */
+.share-verse-urdu {
+  font-family: var(--font-nastaliq);
+  line-height: 2.5;
+  direction: rtl;
+  text-align: center;
 }

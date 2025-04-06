@@ -2,8 +2,9 @@ import BookmarkButton from "./BookmarkButton";
 import CommentsPopup from "./CommentButton";
 import CopyButton from "./CopyPoemButton";
 import ShareButton from "./ShareButton";
+import ShareVerseButton from "./ShareVerseButton";
 
-export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId, poemName }) {
+export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId, poemName , poemNameUr }) {
 	const ur = stanza.content_ur;
 	const en = stanza.content_en || "";
 	const ro = stanza.content_ro || "";
@@ -21,7 +22,7 @@ export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId,
 					{Urdu.map((line, index) => (
 						<p
 							key={index}
-							className="sm:text-3xl text-xl text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full"
+							className="sm:text-3xl text-xl text-gray-900 dark:text-white text-right font-nastaliq my-1 sm:mb-8 mb-3 w-full"
 						>
 							{line}
 						</p>
@@ -88,6 +89,15 @@ export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId,
 					poem={poemName}
 					stanzaId={stanza.stanza_order}
 					shareText={Urdu.join("\n")}
+				/>
+				<ShareVerseButton 
+					verse={English.join("\n")} 
+					author={poemName}
+					urduVerse={Urdu.join("\n")}
+					englishVerse={English.join("\n")}
+					romanianVerse={Romanian.join("\n")}
+					poemNameUr={poemNameUr}
+					bookName={bookId}
 				/>
 				<CommentsPopup poemId={poemId} stanzaId={stanza.id} />
 			</div>

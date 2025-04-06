@@ -79,7 +79,7 @@ const PoemCard = ({ poem, book }) => (
 		>
 			{/* Main heading */}
 			<div className="">
-				<h3 className="text-xl font-urdu leading-[3] pr-2 line-clamp-1 min-h-[4rem] text-gray-900 dark:text-white" dir="rtl">
+				<h3 className="text-xl font-nastaliq leading-[3] pr-2 line-clamp-1 min-h-[4rem] text-gray-900 dark:text-white" dir="rtl">
 					{poem.title_ur || "عنوان موجود نہیں"}
 				</h3>
 			</div>
@@ -184,7 +184,7 @@ const BookDetails = () => {
 										<div className="flex-1 p-6">
 											<h1 className="text-3xl font-bold mb-2 tracking-tight text-gray-900 dark:text-gray-300">
 												{book.title_ur && (
-													<span className="font-urdu block mb-3">({book.title_ur})</span>
+													<span className="font-nastaliq block mb-3">({book.title_ur})</span>
 												)}
 												{book.title_en}
 											</h1>

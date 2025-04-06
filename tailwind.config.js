@@ -14,8 +14,17 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       fontFamily: {
-        urdu: ["var(--font-nastaliq)"],
+        nastaliq: ["var(--font-nastaliq)"],
         sans: ["var(--font-gulzar)"],
+        amiri: ["var(--font-amiri)"],
+        lateef: ["var(--font-lateef)"],
+        poppins: ["var(--font-poppins)"],
+        dancing: ["var(--font-dancing)"],
+        playfair: ["var(--font-playfair)"],
+        lora: ["var(--font-lora)"],
+        merriweather: ["var(--font-merriweather)"],
+        roboto: ["var(--font-roboto)"],
+        opensans: ["var(--font-opensans)"],
       },
       colors: {
         // Define custom colors for both light and dark modes

@@ -52,11 +52,11 @@ const ResultCard = ({ item, index, query }) => (
             <div className="mb-3 flex flex-col">
                 <p 
                     dangerouslySetInnerHTML={{ __html: highlightText(item.content_ur.split("|")[0], query) }}
-                    className="sm:text-3xl text-lg text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full"
+                    className="sm:text-3xl text-lg text-gray-900 dark:text-white text-right font-nastaliq my-1 sm:mb-8 mb-3 w-full"
                 />
                 <p 
                     dangerouslySetInnerHTML={{ __html: highlightText(item.content_ur.split("|")[1], query) }}
-                    className="sm:text-3xl text-lg text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full"
+                    className="sm:text-3xl text-lg text-gray-900 dark:text-white text-right font-nastaliq my-1 sm:mb-8 mb-3 w-full"
                 />
             </div>
         )}
@@ -66,7 +66,7 @@ const ResultCard = ({ item, index, query }) => (
             <div className="mb-3">
                 <p 
                     dangerouslySetInnerHTML={{ __html: highlightText(item.title_ur, query) }}
-                    className="sm:text-3xl text-lg text-gray-900 dark:text-white text-right font-urdu my-1 sm:mb-8 mb-3 w-full"
+                    className="sm:text-3xl text-lg text-gray-900 dark:text-white text-right font-nastaliq my-1 sm:mb-8 mb-3 w-full"
                 />
             </div>
         )}

@@ -11,12 +11,12 @@ import { DEFAULT_BOOKS } from '../search';
 const useLanguageClass = (text, explicitLanguage) => {
   return useMemo(() => {
     // If explicitly specified language, use that
-    if (explicitLanguage === 'ur') return 'font-urdu text-lg';
+    if (explicitLanguage === 'ur') return 'font-nastaliq text-lg';
     if (explicitLanguage === 'en') return '';
     if (explicitLanguage === 'ro') return 'font-normal';
     
     // Otherwise detect from text
-    if (text && /[\u0600-\u06FF]/.test(text)) return 'font-urdu text-lg';
+    if (text && /[\u0600-\u06FF]/.test(text)) return 'font-nastaliq text-lg';
     return '';
   }, [text, explicitLanguage]);
 };

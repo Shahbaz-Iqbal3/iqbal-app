@@ -107,7 +107,7 @@ const PoemPage = () => {
 
 	return (
 		<div className="container mx-auto p-2 sm:p-6 bg-primary dark:bg-primary-dark text-gray-800 dark:text-white rounded-lg shadow-sm dark:shadow-gray-800">
-			<h1 className="font-urdu sm:text-5xl text-3xl font-bold text-gray-900 dark:text-white text-center sm:mb-6 mb-3 p-2 mt-4">
+			<h1 className="font-nastaliq sm:text-5xl text-3xl font-bold text-gray-900 dark:text-white text-center sm:mb-6 mb-3 p-2 mt-4">
 				{poem.title_ur}
 			</h1>
 			<h1 className="sm:text-lg text-sm font-bold text-gray-700 dark:text-gray-200 text-center">
@@ -149,6 +149,7 @@ const PoemPage = () => {
 							bookmarks={poem.bookmark}
 							poemId={poem.id}
 							poemName={poem.title_en}
+							poemNameUr={poem.title_ur}
 							userId={session?.user?.id}
 							bookId={id}
 						/>
