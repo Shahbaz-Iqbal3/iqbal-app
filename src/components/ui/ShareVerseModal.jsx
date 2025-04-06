@@ -229,13 +229,13 @@ const VersePreview = ({
 						<div className="mt-6">
 							<div className="flex flex-col items-center justify-center">
 								<div
-									className={`block ${style.urduFont.font} ${getFontSizeClass("text-lg", style.urduFontSize)}`}
+									className={`block ${style.urduFont.font} text-sm`}
 								>
 									{poemNameUr}
 								</div>
 							</div>
 							<div
-								className={`block mt-1 italic ${style.englishFont.font} ${getFontSizeClass("text-sm", style.englishFontSize)}`}
+								className={`block mt-1 italic ${style.englishFont.font} text-xs`}
 							>
 								{bookName}
 							</div>
