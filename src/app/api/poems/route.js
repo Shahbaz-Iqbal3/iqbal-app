@@ -21,7 +21,7 @@ export async function GET(req) {
         // Normalize poem name
         const poem_name = poemName.replace(/-/g, " ").toUpperCase();
 
-        // Build the query
+        // Main poem query
         let query = supabase
             .from("poem_details")
             .select(`
@@ -41,7 +41,7 @@ export async function GET(req) {
         const { data: poemData, error: poemError } = await query;
 
         // Handle query errors
-        if (poemError) {
+        if (poemError || !poemData) {
             console.error("Database error:", poemError);
             return NextResponse.json(
                 { error: "Poem not found" },
@@ -49,10 +49,42 @@ export async function GET(req) {
             );
         }
 
+        const poemOrder = poemData.poem_order;
+
+        // Fetch previous and next poems based on order
+        const { data: adjacentPoems, error: adjacentError } = await supabase
+            .from("poem_details")
+            .select("poem_order, title_en, title_ur")
+            .in("poem_order", [poemOrder - 1, poemOrder + 1]);
+
+        if (adjacentError) {
+            console.warn("Adjacent poem fetch error:", adjacentError);
+        }
+
+        const navigation = {
+            previous: null,
+            next: null,
+        };
+
+        for (const poem of adjacentPoems || []) {
+            if (poem.poem_order === poemOrder - 1) {
+                navigation.previous = {
+                    title_en: poem.title_en,
+                    title_ur: poem.title_ur
+                };
+            } else if (poem.poem_order === poemOrder + 1) {
+                navigation.next = {
+                    title_en: poem.title_en,
+                    title_ur: poem.title_ur
+                };
+            }
+        }
+
         // Process bookmarks
         const processedData = {
             ...poemData,
-            bookmark: userId ? poemData?.bookmarks || null : null
+            bookmark: userId ? poemData?.bookmarks || null : null,
+            navigation
         };
 
         // Remove bookmarks array from final response

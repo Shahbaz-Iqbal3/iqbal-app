@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import HomePageClient from "@/components/pages/HomePageClient";
 
 export const metadata = {

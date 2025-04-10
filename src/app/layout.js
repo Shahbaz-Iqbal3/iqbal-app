@@ -24,24 +24,27 @@ import CookieConsent from "@/components/ui/CookieConsent";
 const nastaliq = Noto_Nastaliq_Urdu({ 
 	subsets: ["arabic"], 
 	variable: "--font-nastaliq",
-	display: 'swap', // Use swap to prevent layout shifts
+	display: 'swap',
 	preload: true,
+	fallback: ['system-ui', 'arial'],
 });
 
 const amiri = Amiri({
 	subsets: ["arabic"],
 	weight: ["400", "700"],
 	variable: "--font-amiri",
-	display: 'swap', // Use swap to prevent layout shifts
+	display: 'swap',
 	preload: true,
+	fallback: ['system-ui', 'arial'],
 });
 
 const lateef = Lateef({
 	subsets: ["arabic"],
 	weight: ["400", "500", "600", "700"],
 	variable: "--font-lateef",
-	display: 'swap', // Use swap to prevent layout shifts
+	display: 'swap',
 	preload: true,
+	fallback: ['system-ui', 'arial'],
 });
 
 // Poem generator fonts
@@ -50,6 +53,7 @@ const poppins = Poppins({
 	weight: ["300", "400", "500", "600", "700"],
 	variable: "--font-poppins",
 	display: 'swap',
+	fallback: ['system-ui', 'arial'],
 });
 
 const dancingScript = Dancing_Script({
@@ -57,18 +61,21 @@ const dancingScript = Dancing_Script({
 	weight: ["400", "500", "600", "700"],
 	variable: "--font-dancing",
 	display: 'swap',
+	fallback: ['system-ui', 'arial'],
 });
 
 const playfair = Playfair_Display({
 	subsets: ["latin"],
 	variable: "--font-playfair",
 	display: 'swap',
+	fallback: ['system-ui', 'arial'],
 });
 
 const lora = Lora({
 	subsets: ["latin"],
 	variable: "--font-lora",
 	display: 'swap',
+	fallback: ['system-ui', 'arial'],
 });
 
 const merriweather = Merriweather({
@@ -76,6 +83,7 @@ const merriweather = Merriweather({
 	weight: ["300", "400", "700", "900"],
 	variable: "--font-merriweather",
 	display: 'swap',
+	fallback: ['system-ui', 'arial'],
 });
 
 const roboto = Roboto({
@@ -83,15 +91,18 @@ const roboto = Roboto({
 	weight: ["100", "300", "400", "500", "700", "900"],
 	variable: "--font-roboto",
 	display: 'swap',
+	fallback: ['system-ui', 'arial'],
 });
 
 const openSans = Open_Sans({
 	subsets: ["latin"],
 	variable: "--font-opensans",
 	display: 'swap',
+	fallback: ['system-ui', 'arial'],
 });
 
 export const metadata = {
+	metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
 	title: "Sir Muhammad Iqbal - Poetry & Philosophy",
 	description: "Exploring the poetry and philosophy of Sir Muhammad Iqbal",
 	icons: {

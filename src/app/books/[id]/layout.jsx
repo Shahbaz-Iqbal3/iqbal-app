@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+
 
 export async function generateMetadata({ params }) {
     try {

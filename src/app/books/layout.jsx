@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 
 export const metadata = {
     title: "All Books | Sir Muhammad Iqbal",
