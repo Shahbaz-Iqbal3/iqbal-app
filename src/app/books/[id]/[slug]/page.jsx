@@ -37,18 +37,18 @@ const PoemSkeleton = () => {
 				</div>
 
 				{/* Main Content Skeleton */}
-				<div className="flex-1 transition-all duration-300 overflow-hidden">
-					<div className="w-full container p-2 sm:p-6 bg-primary dark:bg-primary-dark text-gray-800 dark:text-white rounded-lg shadow-sm dark:shadow-gray-800 animate-pulse">
+				<main className="flex-1 transition-all duration-300">
+					<div className="h-full w-full p-2 sm:p-6 bg-primary dark:bg-primary-dark text-gray-800 dark:text-white rounded-lg shadow-sm dark:shadow-gray-800">
 						{/* Title Skeleton */}
-						<div className="h-16 sm:h-20 bg-gray-200 dark:bg-gray-700 rounded-lg mx-auto w-3/4 mb-3"></div>
-						<div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded-lg mx-auto w-1/2 mb-6"></div>
+						<div className="h-12 sm:h-16 bg-gray-200 dark:bg-gray-700 rounded-lg mx-auto w-3/4 mb-3"></div>
+						<div className="h-4 sm:h-6 bg-gray-200 dark:bg-gray-700 rounded-lg mx-auto w-1/2 mb-6"></div>
 
 						{/* Action Buttons Skeleton */}
 						<div className="mt-3 flex items-center justify-center sm:gap-5 gap-3 w-full">
 							{[1, 2, 3, 4, 5].map((i) => (
 								<div
 									key={i}
-									className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700"
+									className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 dark:bg-gray-700"
 								></div>
 							))}
 						</div>
@@ -56,44 +56,44 @@ const PoemSkeleton = () => {
 						{/* Book Info Skeleton */}
 						<div className="flex justify-between w-full mt-4">
 							<div>
-								<div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
-								<div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+								<div className="h-3 sm:h-4 w-16 sm:w-20 bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
+								<div className="h-5 sm:h-6 w-24 sm:w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
 							</div>
 							<div>
-								<div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded mb-1 ml-auto"></div>
-								<div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded mx-auto"></div>
+								<div className="h-3 sm:h-4 w-12 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded mb-1 ml-auto"></div>
+								<div className="h-6 sm:h-8 w-12 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded mx-auto"></div>
 							</div>
 						</div>
 
 						{/* Stanzas Skeleton */}
-						<div className="sm:mt-8 space-y-6">
+						<div className="mt-6 sm:mt-8 space-y-4 sm:space-y-6">
 							{[1, 2, 3].map((i) => (
 								<div
 									key={i}
-									className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+									className="p-3 sm:p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
 								>
-									<div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4"></div>
-									<div className="space-y-3">
-										<div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-										<div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
-										<div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-4/6"></div>
+									<div className="h-5 sm:h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-3 sm:mb-4"></div>
+									<div className="space-y-2 sm:space-y-3">
+										<div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+										<div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+										<div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded w-4/6"></div>
 									</div>
 								</div>
 							))}
 						</div>
 
 						{/* Audio Player Skeleton */}
-						<div className="flex flex-col items-center justify-center mt-6 mb-4">
-							<div className="w-full max-w-md h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+						<div className="flex flex-col items-center justify-center mt-4 sm:mt-6 mb-4">
+							<div className="w-full max-w-md h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
 						</div>
 
 						{/* Navigation Skeleton */}
-						<div className="flex justify-center items-center mt-8 mb-4">
-							<div className="w-32 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg mx-2"></div>
-							<div className="w-32 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg mx-2"></div>
+						<div className="flex justify-center items-center gap-4 mt-6 sm:mt-8 mb-4">
+							<div className="w-24 sm:w-32 h-8 sm:h-10 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+							<div className="w-24 sm:w-32 h-8 sm:h-10 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
 						</div>
 					</div>
-				</div>
+				</main>
 			</div>
 		</div>
 	);
@@ -313,7 +313,7 @@ const PoemPage = () => {
 						
 
 						{/* Navigation Buttons */}
-						<div className="flex justify-center items-center my-10 ">
+						<div className="flex justify-center items-center my-10 space-x-2 ">
 							{poem.navigation?.previous ? (
 								<Link
 									href={`/books/${id}/${poem.navigation.previous.title_en

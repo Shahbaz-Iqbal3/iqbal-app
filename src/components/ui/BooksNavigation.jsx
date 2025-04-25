@@ -49,7 +49,7 @@ const BooksNavigation = ({ currentBookId }) => {
 	];
 
 	return (
-		<div className="w-full bg-primary dark:bg-primary-dark py-6 px-4 sm:px-6 border-t border-gray-200 dark:border-gray-700">
+		<div className="w-full bg-primary dark:bg-primary-dark py-6 px-4 sm:px-6 ">
 			<div className="max-w-7xl mx-auto">
 				<h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 dark:text-white mb-4">
 					Explore All Books

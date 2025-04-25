@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, onToggle, bookId, poems, currentPoemId }) => {
     <div className={`md:sticky md:top-1 fixed top-20 flex h-svh z-[49] ${isOpen ? "border-l border-gray-500" : ""}`}>
       <div 
         className={`h-full bg-primary dark:bg-primary-dark text-gray-800 dark:text-white transition-all duration-300 ease-in-out 
-          ${isOpen ? 'w-48 md:w-64' : 'w-0'} overflow-hidden`}
+          ${isOpen ? 'w-48 md:w-64' : 'w-0 md:w-64'} overflow-hidden`}
       >
         {/* Sidebar Content */}
         <div className="p-1">
@@ -63,10 +63,10 @@ const Sidebar = ({ isOpen, onToggle, bookId, poems, currentPoemId }) => {
         </div>
       </div>
 
-      {/* Toggle Button */}
+      {/* Toggle Button - Only visible on mobile */}
       <button
         onClick={onToggle}
-        className="h-12 absolute right-0 px-2 gap-2 bg-primary dark:bg-primary-dark text-gray-800 dark:text-white flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="md:hidden h-12 absolute right-0 px-2 gap-2 bg-primary dark:bg-primary-dark text-gray-800 dark:text-white flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800"
         aria-label="Toggle Sidebar"
       >
         {isOpen ? "" : <h2 className="sm:text-md font-bold text-sm text-nowrap ">{bookId}</h2>}
