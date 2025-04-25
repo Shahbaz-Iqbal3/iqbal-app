@@ -70,10 +70,61 @@ const PoemSkeleton = () => {
 	);
 };
 
+// Sidebar Component
+const Sidebar = ({ isOpen, onToggle }) => {
+	return (
+		<div className="md:sticky absolute top-1  flex  h-svh z-[1000]">
+			<div 
+				className={`h-full bg-gray-800 text-white transition-all duration-300 ease-in-out 
+					${isOpen ? 'w-64' : 'w-0'} overflow-hidden`}
+			>
+				{/* Sidebar Content */}
+				<div className="p-4">
+					<h2 className="text-xl font-bold mb-4">Navigation</h2>
+					<div className="space-y-2">
+						{/* Add your sidebar content here */}
+						<div className="p-2 hover:bg-gray-700 rounded cursor-pointer">
+							Menu Item 1
+						</div>
+						<div className="p-2 hover:bg-gray-700 rounded cursor-pointer">
+							Menu Item 2
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Toggle Button - Now outside the sliding area */}
+			<button
+				onClick={onToggle}
+				className="h-12 absolute px-2 gap-2 bg-gray-800 text-white  flex items-center justify-center"
+				aria-label="Toggle Sidebar"
+			>
+				<h2 className="text-xl font-bold">Navigation</h2>
+				<div>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					className={`h-6 w-6 transition-transform duration-300 ${isOpen ? '-rotate-90' : ''}`}
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={2}
+						d={isOpen ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"}
+					/>
+				</svg></div>
+			</button>
+		</div>
+	);
+};
+
+
+
 const PoemPage = () => {
 	const { data: session, status } = useSession();
 	const router = useRouter();
-
 	const params = useParams();
 	const { id, slug } = params;
 	const [loading, setLoading] = useState(true);
@@ -81,6 +132,7 @@ const PoemPage = () => {
 	const [error, setError] = useState(null);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [initialPoemBookmarked, setInitialPoemBookmarked] = useState(false);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
 	const handlePlayStateChange = (newState) => {
 		setIsPlaying(newState);
@@ -176,152 +228,169 @@ const PoemPage = () => {
 	}
 
 	return (
-		<div className="container mx-auto p-2 sm:p-6 bg-primary dark:bg-primary-dark text-gray-800 dark:text-white rounded-lg shadow-sm dark:shadow-gray-800">
-			<h1 className="font-nastaliq sm:text-5xl text-3xl font-bold text-gray-900 dark:text-white text-center sm:mb-6 mb-3 p-2 mt-4">
-				{poem.title_ur}
-			</h1>
-			<h1 className="sm:text-lg text-sm font-bold text-gray-700 dark:text-gray-200 text-center">
-				{poem.title_en}{" "}
-			</h1>
-			<div className="mt-3 flex items-center justify-center sm:gap-5 gap-3 w-full text-gray-500 dark:text-gray-400">
-				<BookmarkButton
-					userId={session?.user?.id}
-					poemId={poem.id}
-					initialBookmarked={initialPoemBookmarked}
-				/>
-				<PlayButton isPlaying={isPlaying} setIsPlaying={setIsPlaying} disabled={poem.audio_url==='' && !poem.audio_url} />
-				<CopyButton content={poem} />
-				<ShareButton book={id} poem={poem.title_en} />
-				<CommentsPopup poemId={poem.id} />
-			</div>
-
-			<div className="flex justify-between w-full mt-4">
-				<div>
-					<p className="text-gray-500 dark:text-gray-400 text-xs sm:text-base">Narrated in</p>
-					<Link className="sm:text-xl text-sm text-blue-900 dark:text-blue-400 hover:underline" href={`/books/${id}`}>
-						{id}
-					</Link>
-				</div>
-				<div>
-					<p className="text-gray-500 dark:text-gray-400 text-right text-xs sm:text-base">Poem #</p>
-					<p className="sm:text-xl text-sm text-center font-bold rounded-lg bg-gray-100 dark:bg-secondary-dark p-1 px-3 sm:px-6 text-gray-800 dark:text-gray-200">
-						{poem.poem_order > 100 ? "" : poem.poem_order > 10 ? "0" : "00"}
-						{poem.poem_order}
-					</p>
-				</div>
-			</div>
-
-			<div className="sm:mt-8">
-				{poem.stanzas.map((stanza) => (
-					<div key={stanza.stanza_order} id={`stanza-${stanza.stanza_order}`} className="transition-all duration-300">
-						<PoemDisplay
-							stanza={stanza}
-							bookmarks={poem.bookmark}
-							poemId={poem.id}
-							poemName={poem.title_en}
-							poemNameUr={poem.title_ur}
-							userId={session?.user?.id}
-							bookId={id}
-						/>
-					</div>
-				))}
-			</div>
-			<div className="flex flex-col items-center justify-center mt-6 mb-4">
-				{poem.audio_url && (
-					<AudioPlayer
-						audioSrc={poem.audio_url}
-						isPlayed={!isPlaying}
-						onPlayStateChange={handlePlayStateChange}
-					/>
-				)}
-			</div>
+		<div className="flex flex-col min-h-screen">
 			
-			{/* Navigation Buttons */}
-			<div className="flex justify-center items-center mt-8 mb-4 space-x-4">
-				<button
-					onClick={() => handleNavigation('prev')}
-					disabled={!poem.navigation?.previous}
-					className={`group relative overflow-hidden flex justify-between px-5 py-3 rounded-lg transition-all duration-300 sm:min-w-[250px] sm:max-w-[250px] w-1/2 ${
-						poem.navigation?.previous
-							? "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/50 hover:shadow-md hover:shadow-blue-900/50"
-							: "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
-					}`}
-				>
-					{/* Interactive hover effect */}
-					<div className="group-hover:opacity-100 opacity-0 transition-opacity absolute inset-0 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none"></div>
-					
-					<div className="flex items-center space-x-1.5 relative z-10">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className={`h-4 w-4 transition-transform duration-200 ${
-								poem.navigation?.previous ? "group-hover:-translate-x-0.5" : ""
-							}`}
-							viewBox="0 0 20 20"
-							fill="currentColor"
-						>
-							<path
-								fillRule="evenodd"
-								d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-								clipRule="evenodd"
+			
+			<div className="flex-1 flex relative">
+				{/* Sidebar */}
+				<Sidebar
+					isOpen={isSidebarOpen}
+					onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+				/>
+
+				{/* Main Content */}
+				<main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? '' : 'ml-0'}`}>
+					<div className="container mx-auto p-2 sm:p-6 bg-primary dark:bg-primary-dark text-gray-800 dark:text-white rounded-lg shadow-sm dark:shadow-gray-800">
+						<h1 className="font-nastaliq sm:text-5xl text-3xl font-bold text-gray-900 dark:text-white text-center sm:mb-6 mb-3 p-2 mt-4">
+							{poem.title_ur}
+						</h1>
+						<h1 className="sm:text-lg text-sm font-bold text-gray-700 dark:text-gray-200 text-center">
+							{poem.title_en}{" "}
+						</h1>
+						<div className="mt-3 flex items-center justify-center sm:gap-5 gap-3 w-full text-gray-500 dark:text-gray-400">
+							<BookmarkButton
+								userId={session?.user?.id}
+								poemId={poem.id}
+								initialBookmarked={initialPoemBookmarked}
 							/>
-						</svg>
-					</div>
-					{poem.navigation?.previous && (
-						<div className="flex flex-col items-center justify-center">
-							{poem.navigation.previous.title_ur && (
-								<span className="text-sm mt-0.5 max-w-[160px] truncate font-nastaliq text-gray-700 dark:text-gray-200 relative z-10" dir="rtl">
-									{poem.navigation.previous.title_ur}
-								</span>
-							)}
-							<span className="text-sm mt-1 max-w-[160px] truncate text-gray-600 dark:text-gray-300 relative z-10">
-								{poem.navigation.previous.title_en.toProperCase()}
-							</span>
+							<PlayButton isPlaying={isPlaying} setIsPlaying={setIsPlaying} disabled={poem.audio_url==='' && !poem.audio_url} />
+							<CopyButton content={poem} />
+							<ShareButton book={id} poem={poem.title_en} />
+							<CommentsPopup poemId={poem.id} />
 						</div>
-					)}
-				</button>
-				
-				<button
-					onClick={() => handleNavigation('next')}
-					disabled={!poem.navigation?.next}
-					className={`group relative overflow-hidden flex flex-row-reverse justify-between px-5 py-3 rounded-lg transition-all duration-300 sm:min-w-[250px] sm:max-w-[250px] w-1/2 ${
-						poem.navigation?.next
-							? "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/50 hover:shadow-md hover:shadow-blue-900/50"
-							: "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
-					}`}
-				>
-					{/* Interactive hover effect */}
-					<div className="group-hover:opacity-100 opacity-0 transition-opacity absolute inset-0 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none"></div>
-					
-					<div className="flex items-center space-x-1.5 relative z-10">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className={`h-4 w-4 transition-transform duration-200 ${
-								poem.navigation?.next ? "group-hover:translate-x-0.5" : ""
-							}`}
-							viewBox="0 0 20 20"
-							fill="currentColor"
-						>
-							<path
-								fillRule="evenodd"
-								d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-								clipRule="evenodd"
-							/>
-						</svg>
-					</div>
-					{poem.navigation?.next && (
-						<div className="flex flex-col items-center justify-center">
-							{poem.navigation.next.title_ur && (
-								<span className="text-sm mt-0.5 max-w-[160px] truncate font-nastaliq text-gray-700 dark:text-gray-200 relative z-10" dir="rtl">
-									{poem.navigation.next.title_ur}
-								</span>
-							)}
-							<span className="text-sm mt-1 max-w-[160px] truncate text-gray-600 dark:text-gray-300 relative z-10">
-								{poem.navigation.next.title_en.toProperCase()}
-							</span>
+
+						<div className="flex justify-between w-full mt-4">
+							<div>
+								<p className="text-gray-500 dark:text-gray-400 text-xs sm:text-base">Narrated in</p>
+								<Link className="sm:text-xl text-sm text-blue-900 dark:text-blue-400 hover:underline" href={`/books/${id}`}>
+									{id}
+								</Link>
+							</div>
+							<div>
+								<p className="text-gray-500 dark:text-gray-400 text-right text-xs sm:text-base">Poem #</p>
+								<p className="sm:text-xl text-sm text-center font-bold rounded-lg bg-gray-100 dark:bg-secondary-dark p-1 px-3 sm:px-6 text-gray-800 dark:text-gray-200">
+									{poem.poem_order > 100 ? "" : poem.poem_order > 10 ? "0" : "00"}
+									{poem.poem_order}
+								</p>
+							</div>
 						</div>
-					)}
-				</button>
+
+						<div className="sm:mt-8">
+							{poem.stanzas.map((stanza) => (
+								<div key={stanza.stanza_order} id={`stanza-${stanza.stanza_order}`} className="transition-all duration-300">
+									<PoemDisplay
+										stanza={stanza}
+										bookmarks={poem.bookmark}
+										poemId={poem.id}
+										poemName={poem.title_en}
+										poemNameUr={poem.title_ur}
+										userId={session?.user?.id}
+										bookId={id}
+									/>
+								</div>
+							))}
+						</div>
+						<div className="flex flex-col items-center justify-center mt-6 mb-4">
+							{poem.audio_url && (
+								<AudioPlayer
+									audioSrc={poem.audio_url}
+									isPlayed={!isPlaying}
+									onPlayStateChange={handlePlayStateChange}
+								/>
+							)}
+						</div>
+						
+						{/* Navigation Buttons */}
+						<div className="flex justify-center items-center mt-8 mb-4 space-x-4">
+							<button
+								onClick={() => handleNavigation('prev')}
+								disabled={!poem.navigation?.previous}
+								className={`group relative overflow-hidden flex justify-between px-5 py-3 rounded-lg transition-all duration-300 sm:min-w-[250px] sm:max-w-[250px] w-1/2 ${
+									poem.navigation?.previous
+										? "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/50 hover:shadow-md hover:shadow-blue-900/50"
+										: "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+								}`}
+							>
+								{/* Interactive hover effect */}
+								<div className="group-hover:opacity-100 opacity-0 transition-opacity absolute inset-0 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none"></div>
+								
+								<div className="flex items-center space-x-1.5 relative z-10">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className={`h-4 w-4 transition-transform duration-200 ${
+											poem.navigation?.previous ? "group-hover:-translate-x-0.5" : ""
+										}`}
+										viewBox="0 0 20 20"
+										fill="currentColor"
+									>
+										<path
+											fillRule="evenodd"
+											d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+											clipRule="evenodd"
+										/>
+									</svg>
+								</div>
+								{poem.navigation?.previous && (
+									<div className="flex flex-col items-center justify-center">
+										{poem.navigation.previous.title_ur && (
+											<span className="text-sm mt-0.5 max-w-[160px] truncate font-nastaliq text-gray-700 dark:text-gray-200 relative z-10" dir="rtl">
+												{poem.navigation.previous.title_ur}
+											</span>
+										)}
+										<span className="text-sm mt-1 max-w-[160px] truncate text-gray-600 dark:text-gray-300 relative z-10">
+											{poem.navigation.previous.title_en.toProperCase()}
+										</span>
+									</div>
+								)}
+							</button>
+							
+							<button
+								onClick={() => handleNavigation('next')}
+								disabled={!poem.navigation?.next}
+								className={`group relative overflow-hidden flex flex-row-reverse justify-between px-5 py-3 rounded-lg transition-all duration-300 sm:min-w-[250px] sm:max-w-[250px] w-1/2 ${
+									poem.navigation?.next
+										? "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/50 hover:shadow-md hover:shadow-blue-900/50"
+										: "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+								}`}
+							>
+								{/* Interactive hover effect */}
+								<div className="group-hover:opacity-100 opacity-0 transition-opacity absolute inset-0 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none"></div>
+								
+								<div className="flex items-center space-x-1.5 relative z-10">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className={`h-4 w-4 transition-transform duration-200 ${
+											poem.navigation?.next ? "group-hover:translate-x-0.5" : ""
+										}`}
+										viewBox="0 0 20 20"
+										fill="currentColor"
+									>
+										<path
+											fillRule="evenodd"
+											d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+											clipRule="evenodd"
+										/>
+									</svg>
+								</div>
+								{poem.navigation?.next && (
+									<div className="flex flex-col items-center justify-center">
+										{poem.navigation.next.title_ur && (
+											<span className="text-sm mt-0.5 max-w-[160px] truncate font-nastaliq text-gray-700 dark:text-gray-200 relative z-10" dir="rtl">
+												{poem.navigation.next.title_ur}
+											</span>
+										)}
+										<span className="text-sm mt-1 max-w-[160px] truncate text-gray-600 dark:text-gray-300 relative z-10">
+											{poem.navigation.next.title_en.toProperCase()}
+										</span>
+									</div>
+								)}
+							</button>
+						</div>
+					</div>
+				</main>
 			</div>
+
+			
 		</div>
 	);
 };

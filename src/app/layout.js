@@ -107,7 +107,7 @@ export const metadata = {
 	description: "Exploring the poetry and philosophy of Sir Muhammad Iqbal",
 	icons: {
 		icon: [
-			{ url: '/favicon_io1/favicon.ico' },
+			{ url: '/favicon.ico' },
 			{ url: '/favicon_io1/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
 			{ url: '/favicon_io1/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
 		],
@@ -191,7 +191,7 @@ export default async function RootLayout({ children }) {
 				{/* Apple touch icon */}
 				<link rel="apple-touch-icon" href="/favicon_io1/apple-touch-icon.png" />
 				{/* Favicon for different devices */}
-				<link rel="icon" type="image/x-icon" href="/favicon_io1/favicon.ico" />
+				<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 				<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io1/favicon-32x32.png" />
 				<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io1/favicon-16x16.png" />
 				{/* Android Chrome icons */}
