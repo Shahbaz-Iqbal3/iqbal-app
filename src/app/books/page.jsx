@@ -43,7 +43,7 @@ const BooksPage = () => {
 				{error ? (
 					<p className="text-center text-red-500 dark:text-red-400">{error}</p>
 				) : (
-					<div className="flex container mx-auto mt-6 flex-wrap justify-center gap-5">
+					<div className="container mx-auto mt-6 grid grid-cols-2 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-4">
 						{isLoading ? (
 							renderSkeletonCards()
 						) : (
