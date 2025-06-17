@@ -62,27 +62,6 @@ export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId,
 					initialBookmarked={initialBookmarked}
 					isLogin={!userId}
 				/>
-				<button
-					className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-					onClick={() => {
-						console.log(Romanian);
-					}}
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						strokeWidth="1.5"
-						stroke="currentColor"
-						className="size-6"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-						/>
-					</svg>
-				</button>
 				<CopyButton content={stanza} />
 				<ShareButton
 					book={bookId}
