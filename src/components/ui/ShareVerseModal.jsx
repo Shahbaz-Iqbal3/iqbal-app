@@ -279,7 +279,7 @@ export default function ShareVerseModal({
 						animate={{ scale: 1, opacity: 1, y: 0 }}
 						exit={{ scale: 0.95, opacity: 0, y: 20 }}
 						transition={{ type: "spring", damping: 25, stiffness: 300 }}
-						className="bg-white dark:bg-gray-800  shadow-2xl w-full max-w-4xl max-h-[95vh] absolute bottom-0 rounded-b-none md:rounded-b-2xl rounded-t-2xl       md:relative md:max-h-[80vh] overflow-scroll md:overflow-hidden"
+						className="bg-white dark:bg-gray-800  shadow-2xl w-full max-w-4xl xl:max-h-[95vh] h-[99vh] absolute bottom-0 rounded-b-none md:rounded-b-2xl rounded-t-2xl       md:relative md:max-h-[80vh] overflow-scroll md:overflow-hidden"
 					>
 						<div className="p-3 sm:p-4 md:p-6">
 							<div className="flex justify-between items-center mb-4 sm:mb-6">
@@ -315,7 +315,7 @@ export default function ShareVerseModal({
 								</div>
 
 								{/* Controls Panel */}
-								<div className="space-y-4 sm:space-y-6 overflow-y-auto max-h-[50vh] sm:max-h-[55vh] pr-2">
+								<div className="space-y-4 sm:space-y-6 overflow-y-auto max-h-[50vh] sm:max-h-[70vh] px-2 -mx-3">
 									<StylePresets 
 										activePreset={activePreset}
 										applyPreset={applyPreset}

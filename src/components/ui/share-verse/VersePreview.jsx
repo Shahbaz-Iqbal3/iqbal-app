@@ -44,7 +44,7 @@ const VersePreview = ({
 				>
 					{selectedLanguages.urdu && urduVerse && (
 						<div
-							className={`mb-4 sm:mb-6 text-center text-nowrap leading-relaxed ${style.urduFont.font} ${getFontSizeClass("text-2xl", style.urduFontSize)}`}
+							className={`mb-4 sm:mb-6 text-center leading-relaxed ${style.urduFont.font} ${getFontSizeClass("text-2xl", style.urduFontSize)}`}
 						>
 							{urduVerse}
 						</div>
@@ -52,7 +52,7 @@ const VersePreview = ({
 
 					{selectedLanguages.english && englishVerse && (
 						<div
-							className={`italic leading-relaxed text-nowrap text-center ${style.englishFont.font} ${getFontSizeClass("text-base", style.englishFontSize)}`}
+							className={`italic leading-relaxed  text-center ${style.englishFont.font} ${getFontSizeClass("text-base", style.englishFontSize)}`}
 						>
 							{englishVerse}
 						</div>
