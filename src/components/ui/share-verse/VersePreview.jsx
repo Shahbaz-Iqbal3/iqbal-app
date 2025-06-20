@@ -14,7 +14,7 @@ const VersePreview = ({
 	return (
 		<div
 			ref={previewRef}
-			className="aspect-square rounded-xl shadow-lg overflow-hidden relative w-full max-w-[500px] mx-auto transform transition-transform duration-300"
+			className="rounded-xl shadow-lg overflow-hidden relative w-full max-w-[400px] mx-auto aspect-[9/16] transform transition-transform duration-300"
 			style={{
 				backgroundColor: style.backgroundColor,
 				backgroundImage: style.backgroundImage

@@ -296,7 +296,7 @@ export default function ShareVerseModal({
 
 							<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
 								{/* Preview Panel */}
-								<div className="space-y-4 sm:space-y-6">
+								<div className="space-y-4 sm:space-y-6 overflow-y-auto max-h-[70vh]">
 									<VersePreview 
 										previewRef={previewRef}
 										style={style}
@@ -321,37 +321,7 @@ export default function ShareVerseModal({
 										applyPreset={applyPreset}
 									/>
 
-									{/* Advanced Customization Button */}
-                        			<div className="mt-4">
-                        				<button
-                        					onClick={() => setShowAdvanced(!showAdvanced)}
-                        					className={`w-full py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 group ${
-                        						showAdvanced 
-                        							? "bg-blue-500 text-white shadow-md" 
-                        							: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                        					}`}
-                        				>
-                        					<span className="text-sm font-medium">
-                        						{showAdvanced ? "Hide" : "Show"} Advanced Customization
-                        					</span>
-                        					<svg
-                        						className={`w-4 h-4 transform transition-transform duration-200 ${
-                        							showAdvanced ? "rotate-180" : ""
-                        						}`}
-                        						fill="none"
-                        						stroke="currentColor"
-                        						viewBox="0 0 24 24"
-                        					>
-                        						<path
-                        							strokeLinecap="round"
-                        							strokeLinejoin="round"
-                        							strokeWidth={2}
-                        							d="M19 9l-7 7-7-7"
-                        						/>
-                        					</svg>
-                        				</button>
-                        			</div>  
-									{/* Advanced Customization Section */}
+									{/* Advanced Customization Section (always show if showAdvanced is true, no hide button) */}
 									{showAdvanced && (
 										<AdvancedCustomization 
 											showAdvanced={showAdvanced}
@@ -361,6 +331,33 @@ export default function ShareVerseModal({
 											toggleLanguage={toggleLanguage}
 											handleFileUpload={handleFileUpload}
 										/>
+									)}
+
+									{/* Advanced Customization Button (show only if not already shown) */}
+									{!showAdvanced && (
+										<div className="mt-4">
+											<button
+												onClick={() => setShowAdvanced(true)}
+												className="w-full py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 group bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+											>
+												<span className="text-sm font-medium">
+													Show Advanced Customization
+												</span>
+												<svg
+													className="w-4 h-4 transform transition-transform duration-200"
+													fill="none"
+													stroke="currentColor"
+													viewBox="0 0 24 24"
+												>
+													<path
+														strokeLinecap="round"
+														strokeLinejoin="round"
+														strokeWidth={2}
+														d="M19 9l-7 7-7-7"
+													/>
+												</svg>
+											</button>
+										</div>
 									)}
 								</div>
 							</div>
