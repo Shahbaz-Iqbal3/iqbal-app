@@ -171,6 +171,10 @@ const BookDetails = () => {
 														className="md:object-cover object-contain "
 								priority={true}
 														quality={80}
+								onError={(e) => {
+									console.error('Image failed to load:', book.cover_image_url);
+									e.target.style.display = 'none';
+								}}
 													/>
 												) : (
 													<div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">

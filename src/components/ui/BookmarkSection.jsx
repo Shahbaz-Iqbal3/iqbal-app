@@ -198,9 +198,9 @@ const BookmarksSection = ({
 								</h4>
 								<div className="flex items-center gap-2">
 									<Link
-										href={`/books/${bookmark.book_title_en || "unknown"}/${
-											bookmark.poem_title_en?.replace(/\s+/g, "-").toLowerCase() || "unknown"
-										}${bookmark.stanza_order ? `#stanza-${bookmark.stanza_order}` : ""}`}
+										href={poemSlug && poemSlug !== "none"
+											? `/books/${bookmark.book_title_en || "unknown"}/${poemSlug}${bookmark.stanza_order ? `#stanza-${bookmark.stanza_order}` : ""}`
+											: "#"}
 										className="text-blue-500 flex gap-1 text-sm dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors"
 									>
 										<span>view {bookmark.type === "poem" ? "poem" : "stanza"}</span>

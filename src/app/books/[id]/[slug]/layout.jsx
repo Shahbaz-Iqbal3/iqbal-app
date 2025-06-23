@@ -1,5 +1,3 @@
-
-
 String.prototype.toProperCase = function () {
     return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
@@ -8,6 +6,32 @@ export async function generateMetadata({ params }) {
     try {
         // Await the params object
         const { id, slug } = await params;
+        
+        
+        // Check if slug is valid (not 'none' or empty)
+        if (!slug || slug === 'none' || slug === 'untitled') {
+            return {
+                title: "Poem Details | Poetry Collection",
+                description: "Read this beautiful poem from our collection",
+                openGraph: {
+                    title: "Poem Details | Poetry Collection",
+                    description: "Read this beautiful poem from our collection",
+                    images: ['/images/og-image.jpg'],
+                    type: 'article',
+                    siteName: 'Sir Muhammad Iqbal - Poetry & Philosophy',
+                    locale: 'en_US',
+                    url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+                },
+                twitter: {
+                    card: "summary_large_image",
+                    title: "Poem Details | Poetry Collection",
+                    description: "Read this beautiful poem from our collection",
+                    images: ['/images/og-image.jpg'],
+                    site: '@iqbalpoetry',
+                    creator: '@iqbalpoetry',
+                },
+            };
+        }
         
         // Use absolute URL for server-side fetch
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';

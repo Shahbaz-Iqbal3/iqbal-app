@@ -15,7 +15,7 @@ export default function ShareVerseButton({ verse, author, urduVerse, englishVers
       >
         <Image className="w-5 h-5" />
       </button>
-
+      
       <ShareVerseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

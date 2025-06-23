@@ -11,10 +11,16 @@ const VersePreview = ({
 	poemNameUr, 
 	bookName 
 }) => {
+	const aspectClass = style.aspectRatio === '1/1'
+		? 'aspect-[1/1]'
+		: style.aspectRatio === '3/4'
+			? 'aspect-[3/4]'
+			: 'aspect-[9/16]';
+
 	return (
 		<div
 			ref={previewRef}
-			className="rounded-xl shadow-lg overflow-hidden relative w-full max-w-[400px] mx-auto aspect-[9/16] transform transition-transform duration-300"
+			className={`shadow-lg overflow-hidden relative w-full max-w-[400px] mx-auto ${aspectClass} transform transition-transform duration-300`}
 			style={{
 				backgroundColor: style.backgroundColor,
 				backgroundImage: style.backgroundImage
@@ -77,10 +83,15 @@ const VersePreview = ({
 				</div>
 
 				<div
-					className="text-xs sm:text-sm mt-auto pt-2 sm:pt-4 opacity-80"
+					className="text-xs sm:text-base tracking-wider font-mono mt-auto pt-2 sm:pt-4 flex items-center justify-center gap-2"
 					style={{ color: style.textColor }}
 				>
-					drallamaiabal.com
+					<img
+						src="/favicon_io1/apple-touch-icon.png"
+						alt="icon"
+						style={{ width: 32, height: 32, objectFit: "contain" }}
+					/>
+					<p>drallamaiqbal.com</p>
 				</div>
 			</div>
 		</div>

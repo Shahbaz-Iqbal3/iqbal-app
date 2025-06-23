@@ -1,15 +1,11 @@
 import "./globals.css";
 import { 
 	Noto_Nastaliq_Urdu, 
-	Amiri,
-	Lateef,
 	Poppins,
 	Dancing_Script,
-	Playfair_Display,
-	Lora,
-	Merriweather,
 	Roboto,
-	Open_Sans 
+	Open_Sans,
+	Amiri
 } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -24,24 +20,6 @@ import CookieConsent from "@/components/ui/CookieConsent";
 const nastaliq = Noto_Nastaliq_Urdu({ 
 	subsets: ["arabic"], 
 	variable: "--font-nastaliq",
-	display: 'swap',
-	preload: true,
-	fallback: ['system-ui', 'arial'],
-});
-
-const amiri = Amiri({
-	subsets: ["arabic"],
-	weight: ["400", "700"],
-	variable: "--font-amiri",
-	display: 'swap',
-	preload: true,
-	fallback: ['system-ui', 'arial'],
-});
-
-const lateef = Lateef({
-	subsets: ["arabic"],
-	weight: ["400", "500", "600", "700"],
-	variable: "--font-lateef",
 	display: 'swap',
 	preload: true,
 	fallback: ['system-ui', 'arial'],
@@ -64,28 +42,6 @@ const dancingScript = Dancing_Script({
 	fallback: ['system-ui', 'arial'],
 });
 
-const playfair = Playfair_Display({
-	subsets: ["latin"],
-	variable: "--font-playfair",
-	display: 'swap',
-	fallback: ['system-ui', 'arial'],
-});
-
-const lora = Lora({
-	subsets: ["latin"],
-	variable: "--font-lora",
-	display: 'swap',
-	fallback: ['system-ui', 'arial'],
-});
-
-const merriweather = Merriweather({
-	subsets: ["latin"],
-	weight: ["300", "400", "700", "900"],
-	variable: "--font-merriweather",
-	display: 'swap',
-	fallback: ['system-ui', 'arial'],
-});
-
 const roboto = Roboto({
 	subsets: ["latin"],
 	weight: ["100", "300", "400", "500", "700", "900"],
@@ -97,6 +53,14 @@ const roboto = Roboto({
 const openSans = Open_Sans({
 	subsets: ["latin"],
 	variable: "--font-opensans",
+	display: 'swap',
+	fallback: ['system-ui', 'arial'],
+});
+
+const amiri = Amiri({
+	subsets: ["arabic"],
+	weight: ["400", "700"],
+	variable: "--font-amiri",
 	display: 'swap',
 	fallback: ['system-ui', 'arial'],
 });
@@ -164,28 +128,6 @@ export default async function RootLayout({ children }) {
 		<html lang="en" className="h-full light">
 			<head>
 				<ThemeScript />
-				{/* Preload fonts to prevent layout shifts */}
-				<link
-					rel="preload"
-					href={nastaliq.url}
-					as="font"
-					type="font/woff2"
-					crossOrigin="anonymous"
-				/>
-				<link 
-					rel="preload"
-					href={amiri.url}
-					as="font"
-					type="font/woff2"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preload"
-					href={lateef.url}
-					as="font"
-					type="font/woff2"
-					crossOrigin="anonymous"
-				/>
 				{/* Web manifest for PWA support */}
 				<link rel="manifest" href="/favicon_io1/site.webmanifest" />
 				{/* Apple touch icon */}
@@ -198,7 +140,7 @@ export default async function RootLayout({ children }) {
 				<link rel="icon" type="image/png" sizes="192x192" href="/favicon_io1/android-chrome-192x192.png" />
 				<link rel="icon" type="image/png" sizes="512x512" href="/favicon_io1/android-chrome-512x512.png" />
 			</head>
-			<body className={`${nastaliq.variable} ${amiri.variable} ${lateef.variable} ${poppins.variable} ${dancingScript.variable} ${playfair.variable} ${lora.variable} ${merriweather.variable} ${roboto.variable} ${openSans.variable} antialiased min-h-full bg-primary dark:bg-primary-dark`}>
+			<body className={`${nastaliq.variable} ${amiri.variable} ${poppins.variable} ${dancingScript.variable} ${roboto.variable} ${openSans.variable} antialiased min-h-full bg-primary dark:bg-primary-dark`}>
 				<ThemeProvider>
 					<SessionProvider>
 						<NotificationProvider>

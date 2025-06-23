@@ -21,9 +21,7 @@ const FontCustomization = ({ style, setStyle }) => {
 							}`}
 						>
 							<span
-								className={`mt-1 leading-[6px] ${font.font} ${
-									font.id === "lateef" ? "text-lg sm:text-xl" : "text-xs sm:text-sm"
-								} ${font.id === "nastaliq" ? "mb-1 sm:mb-2" : ""}`}
+								className={`mt-1 leading-[6px] ${font.font} ${font.id === "nastaliq" ? "text-xs sm:text-sm mb-1 sm:mb-2" : "text-xs sm:text-sm"}`}
 							>
 								اردو
 							</span>

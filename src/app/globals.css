@@ -116,3 +116,28 @@ dialog[open] {
   direction: rtl;
   text-align: center;
 }
+
+
+
+/* modern-scrollbar.css */
+.scrollbar-modern {
+  scrollbar-width: thin;             /* Firefox */
+  scrollbar-color: #888 transparent; /* Firefox */
+}
+
+.scrollbar-modern::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.scrollbar-modern::-webkit-scrollbar-track {
+  background: transparent;
+}
+

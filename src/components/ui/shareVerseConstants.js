@@ -10,11 +10,6 @@ export const urduFonts = [
 		font: "font-amiri",
 		size: "text-2xl",
 	},
-	{
-		id: "lateef",
-		font: "font-lateef",
-		size: "text-3xl",
-	},
 ];
 
 export const englishFonts = [
@@ -25,18 +20,6 @@ export const englishFonts = [
 	{
 		id: "dancing",
 		font: "font-dancing",
-	},
-	{
-		id: "playfair",
-		font: "font-playfair",
-	},
-	{
-		id: "lora",
-		font: "font-lora",
-	},
-	{
-		id: "merriweather",
-		font: "font-merriweather",
 	},
 	{
 		id: "roboto",
@@ -55,67 +38,20 @@ export const stylePresets = [
 		icon: "✨",
 		style: {
 			urduFont: urduFonts[0],
-			englishFont: englishFonts[0],
+			englishFont: englishFonts[2],
 			textColor: "#ffffff",
 			backgroundColor: "#1a202c",
 			backgroundImage: "/images/presets/darknature.avif",
 			overlayOpacity: 0.7,
 		},
 	},
-	{
-		id: "classic",
-		icon: "📚",
-		style: {
-			urduFont: urduFonts[2],
-			englishFont: englishFonts[0],
-			textColor: "#ffffff",
-			backgroundColor: "#2d3748",
-			backgroundImage: "/images/presets/romantic.avif",
-			overlayOpacity: 0.7,
-		},
-	},
-	{
-		id: "modern",
-		icon: "🎯",
-		style: {
-			urduFont: urduFonts[1],
-			englishFont: englishFonts[3],
-			textColor: "#ffffff",
-			backgroundColor: "#2d3748",
-			backgroundImage: "/images/presets/hopeful.avif",
-			overlayOpacity: 0.8,
-		},
-	},
-	{
-		id: "elegant",
-		icon: "✒️",
-		style: {
-			urduFont: urduFonts[0],
-			englishFont: englishFonts[1],
-			textColor: "#ffffff",
-			backgroundColor: "#2c1810",
-			backgroundImage: "/images/presets/sad.avif",
-			overlayOpacity: 0.6,
-		},
-	},
-	{
-		id: "nature",
-		icon: "🌿",
-		style: {
-			urduFont: urduFonts[0],
-			englishFont: englishFonts[2],
-			textColor: "#ffffff",
-			backgroundColor: "#1a4731",
-			backgroundImage: "/images/presets/nature.avif",
-			overlayOpacity: 0.7,
-		},
-	},
+	
 	{
 		id: "minimal",
 		icon: "⚪",
 		style: {
 			urduFont: urduFonts[1],
-			englishFont: englishFonts[0],
+			englishFont: englishFonts[3],
 			textColor: "#000000",
 			backgroundColor: "#ffffff",
 			backgroundImage: "",
@@ -127,7 +63,7 @@ export const stylePresets = [
 		icon: "⚫",
 		style: {
 			urduFont: urduFonts[1],
-			englishFont: englishFonts[0],
+			englishFont: englishFonts[2],
 			textColor: "#ffffff",
 			backgroundColor: "#000000",
 			backgroundImage: "",
@@ -138,8 +74,8 @@ export const stylePresets = [
 		id: "sepia",
 		icon: "🟤",
 		style: {
-			urduFont: urduFonts[2],
-			englishFont: englishFonts[3],
+			urduFont: urduFonts[0],
+			englishFont: englishFonts[1],
 			textColor: "#3c2a21",
 			backgroundColor: "#f4ecd8",
 			backgroundImage: "",
@@ -151,7 +87,7 @@ export const stylePresets = [
 		icon: "🌊",
 		style: {
 			urduFont: urduFonts[0],
-			englishFont: englishFonts[2],
+			englishFont: englishFonts[0],
 			textColor: "#ffffff",
 			backgroundColor: "#0c4a6e",
 			backgroundImage: "",
@@ -162,8 +98,8 @@ export const stylePresets = [
 		id: "sunset",
 		icon: "🌅",
 		style: {
-			urduFont: urduFonts[1],
-			englishFont: englishFonts[1],
+			urduFont: urduFonts[0],
+			englishFont: englishFonts[3],
 			textColor: "#ffffff",
 			backgroundColor: "#7c2d12",
 			backgroundImage: "",
@@ -174,8 +110,8 @@ export const stylePresets = [
 		id: "forest",
 		icon: "🌲",
 		style: {
-			urduFont: urduFonts[0],
-			englishFont: englishFonts[4],
+			urduFont: urduFonts[1],
+			englishFont: englishFonts[3],
 			textColor: "#f0fdf4",
 			backgroundColor: "#14532d",
 			backgroundImage: "",
@@ -186,8 +122,8 @@ export const stylePresets = [
 		id: "lavender",
 		icon: "💜",
 		style: {
-			urduFont: urduFonts[2],
-			englishFont: englishFonts[5],
+			urduFont: urduFonts[0],
+			englishFont: englishFonts[2],
 			textColor: "#ffffff",
 			backgroundColor: "#581c87",
 			backgroundImage: "",
@@ -198,8 +134,8 @@ export const stylePresets = [
 		id: "golden",
 		icon: "✨",
 		style: {
-			urduFont: urduFonts[0],
-			englishFont: englishFonts[1],
+			urduFont: urduFonts[1],
+			englishFont: englishFonts[0],
 			textColor: "#000000",
 			backgroundColor: "#fbbf24",
 			backgroundImage: "",
@@ -210,8 +146,8 @@ export const stylePresets = [
 		id: "pastel",
 		icon: "🎨",
 		style: {
-			urduFont: urduFonts[2],
-			englishFont: englishFonts[6],
+			urduFont: urduFonts[0],
+			englishFont: englishFonts[1],
 			textColor: "#4c1d95",
 			backgroundColor: "#fae8ff",
 			backgroundImage: "",
@@ -223,7 +159,7 @@ export const stylePresets = [
 		icon: "🌙",
 		style: {
 			urduFont: urduFonts[1],
-			englishFont: englishFonts[3],
+			englishFont: englishFonts[0],
 			textColor: "#e2e8f0",
 			backgroundColor: "#0f172a",
 			backgroundImage: "",
@@ -235,7 +171,7 @@ export const stylePresets = [
 		icon: "🌹",
 		style: {
 			urduFont: urduFonts[0],
-			englishFont: englishFonts[2],
+			englishFont: englishFonts[3],
 			textColor: "#ffffff",
 			backgroundColor: "#be123c",
 			backgroundImage: "",
@@ -246,8 +182,8 @@ export const stylePresets = [
 		id: "emerald",
 		icon: "💎",
 		style: {
-			urduFont: urduFonts[2],
-			englishFont: englishFonts[4],
+			urduFont: urduFonts[0],
+			englishFont: englishFonts[2],
 			textColor: "#ffffff",
 			backgroundColor: "#047857",
 			backgroundImage: "",

@@ -1,111 +1,70 @@
-"use client";
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
-// Define style presets for different moods
-const stylePresets = {
-  love: {
-    name: "Romantic",
-    font: "var(--font-playfair)",
-    fontSize: "24px",
-    textColor: "#ffffff",
-    backgroundColor: "#1a202c",
-    backgroundImage: "/images/presets/romantic.avif",
-    description: "Soft and romantic style perfect for love poems"
-  },
-  hope: {
-    name: "Hopeful",
-    font: "var(--font-opensans)",
-    fontSize: "20px",
-    textColor: "#ffffff",
-    backgroundColor: "#1a202c",
-    backgroundImage: "/images/presets/hopeful.avif",
-    description: "Bright and uplifting style for hopeful verses"
-  },
-  dark: {
-    name: "Dark",
-    font: "var(--font-merriweather)",
-    fontSize: "22px",
-    textColor: "#ffffff",
-    backgroundColor: "#1a202c",
-    backgroundImage: "/images/presets/darknature.avif",
-    description: "Deep and intense style for dark themes"
-  },
-  nature: {
-    name: "Nature",
-    font: "var(--font-lora)",
-    fontSize: "20px",
-    textColor: "#ffffff",
-    backgroundColor: "#1a202c",
-    backgroundImage: "/images/presets/nature.avif",
-    description: "Earthy and organic style for nature poems"
-  },
-  melancholic: {
-    name: "Melancholic",
-    font: "var(--font-roboto)",
-    fontSize: "18px",
-    textColor: "#ffffff",
-    backgroundColor: "#1a202c",
-    backgroundImage: "/images/presets/sad.avif",
-    description: "Subtle and reflective style for melancholic verses"
-  }
-};
+const STOPWORDS = new Set([
+  'the', 'is', 'and', 'a', 'an', 'of', 'on', 'in', 'to', 'how', 'can', 'be', 'with',
+  'that', 'were', 'was', 'it', 'for', 'at', 'by', 'this', 'from', 'as', 'but', 'or'
+]);
 
-// Keywords for mood detection
-const moodKeywords = {
-  love: ['love', 'heart', 'kiss', 'romance', 'passion', 'soul', 'forever', 'beautiful', 'darling', 'sweet'],
-  hope: ['hope', 'light', 'future', 'dream', 'believe', 'faith', 'strength', 'courage', 'rise', 'shine'],
-  dark: ['dark', 'night', 'shadow', 'death', 'pain', 'sorrow', 'tears', 'cry', 'lonely', 'empty'],
-  nature: ['tree', 'flower', 'sky', 'mountain', 'river', 'wind', 'earth', 'sun', 'moon', 'star'],
-  melancholic: ['sad', 'melancholy', 'memory', 'past', 'gone', 'lost', 'time', 'fade', 'end', 'farewell']
-};
+// Extract top 2–3 meaningful keywords
+function extractTopKeywords(text, max = 1) {
+  const words = text.toLowerCase().match(/\b\w+\b/g) || [];
+
+  const frequencyMap = {};
+  const orderMap = {};
+
+  words.forEach((word, index) => {
+    if (!STOPWORDS.has(word) && word.length > 2) {
+      frequencyMap[word] = (frequencyMap[word] || 0) + 1;
+      if (orderMap[word] === undefined) orderMap[word] = index; // first appearance
+    }
+  });
+
+  return Object.entries(frequencyMap)
+    .sort((a, b) =>
+      b[1] === a[1] ? orderMap[a[0]] - orderMap[b[0]] : b[1] - a[1]
+    )
+    .slice(0, max)
+    .map(([word]) => word);
+}
+
+async function fetchUnsplashImages(keywords, count = 4) {
+  const query = keywords.join(' ') || 'poetry';
+  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=portrait&per_page=${count}`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`,
+    },
+  });
+
+  const data = await res.json();
+  return data?.results?.map(img => img.urls.regular) || [];
+}
 
 export default function AIStyleSuggestions({ text, onApplyStyle, autoApply = false }) {
   useEffect(() => {
-    if (autoApply && text) {
-      // Use setTimeout to ensure we're not in the middle of a render cycle
-      const timeoutId = setTimeout(() => {
-        // Simple mood detection
-        const words = text.toLowerCase().split(/\s+/);
-        const moodScores = {};
-        
-        Object.entries(moodKeywords).forEach(([mood, keywords]) => {
-          moodScores[mood] = words.filter(word => keywords.includes(word)).length;
-        });
-        
-        // Find the mood with highest score or default to 'dark'
-        const maxScore = Math.max(...Object.values(moodScores));
-        const mood = maxScore === 0 ? 'dark' : 
-          Object.entries(moodScores).find(([_, score]) => score === maxScore)[0];
-        
-        const stylePreset = stylePresets[mood];
-        
-        // Convert the style preset to the expected format
-        const aiStyle = {
-          urduFontId: 'nastaliq',
-          englishFontId: stylePreset.font.includes('playfair') ? 'playfair' :
-                        stylePreset.font.includes('lora') ? 'lora' :
-                        stylePreset.font.includes('merriweather') ? 'merriweather' :
-                        'roboto',
-          fontSize: stylePreset.fontSize,
-          textColor: stylePreset.textColor,
-          backgroundColor: stylePreset.backgroundColor,
-          backgroundImage: stylePreset.backgroundImage,
-          overlayOpacity: 0.7
-        };
+    if (!autoApply || !text) return;
 
-        // Apply the style
-        onApplyStyle(aiStyle);
-      }, 0);
+    const timeoutId = setTimeout(async () => {
+      const keywords = extractTopKeywords(text);
+      const images = await fetchUnsplashImages(keywords);
 
-      // Cleanup timeout if component unmounts
-      return () => clearTimeout(timeoutId);
-    }
+      const aiStyle = {
+        urduFontId: 'nastaliq',
+        englishFontId: 'opensans',
+        fontSize: '20px',
+        textColor: '#ffffff',
+        backgroundColor: '#111827',
+        backgroundImage: images[0] || null,
+        additionalImages: images,
+        imageKeywords: keywords,
+        overlayOpacity: 0.5,
+      };
+
+      onApplyStyle(aiStyle);
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
   }, [text, autoApply, onApplyStyle]);
 
-  // Don't render anything in auto mode
-  if (autoApply) return null;
-
-  // Manual mode UI (not used in this case)
   return null;
-} 
+}

@@ -183,15 +183,7 @@ const PoemPage = () => {
 		};
 	}, [poem]); // Trigger when poem data is loaded
 
-	const handleNavigation = (direction) => {
-		if (!poem || !poem.navigation) return;
 
-		const targetPoem = direction === "prev" ? poem.navigation.previous : poem.navigation.next;
-		if (targetPoem && targetPoem.title_en) {
-			const targetSlug = targetPoem.title_en.toLowerCase().replace(/ /g, "-");
-			router.push(`/books/${id}/${targetSlug}`);
-		}
-	};
 
 	// Add useEffect to fetch book poems
 	useEffect(() => {
@@ -314,11 +306,9 @@ const PoemPage = () => {
 
 						{/* Navigation Buttons */}
 						<div className="flex justify-center items-center my-10 space-x-2 ">
-							{poem.navigation?.previous ? (
+							{poem.navigation?.previous && poem.navigation.previous.title_en && poem.navigation.previous.title_en.toLowerCase().replace(/ /g, "-") !== "none" && (
 								<Link
-									href={`/books/${id}/${poem.navigation.previous.title_en
-										.toLowerCase()
-										.replace(/ /g, "-")}`}
+									href={`/books/${id}/${poem.navigation.previous.title_en.toLowerCase().replace(/ /g, "-")}`}
 									className="group relative overflow-hidden flex justify-between px-5 py-3 rounded-lg transition-all duration-300 sm:min-w-[250px] sm:max-w-[250px] w-1/2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/50 hover:shadow-md hover:shadow-blue-900/50"
 								>
 									{/* Interactive hover effect */}
@@ -352,30 +342,11 @@ const PoemPage = () => {
 										</span>
 									</div>
 								</Link>
-							) : (
-								<div className="flex justify-between px-5 py-3 rounded-lg sm:min-w-[250px] sm:max-w-[250px] w-1/2 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed">
-									<div className="flex items-center space-x-1.5">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											className="h-4 w-4"
-											viewBox="0 0 20 20"
-											fill="currentColor"
-										>
-											<path
-												fillRule="evenodd"
-												d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-												clipRule="evenodd"
-											/>
-										</svg>
-									</div>
-								</div>
 							)}
 
-							{poem.navigation?.next ? (
+							{poem.navigation?.next && poem.navigation.next.title_en && poem.navigation.next.title_en.toLowerCase().replace(/ /g, "-") !== "none" && (
 								<Link
-									href={`/books/${id}/${poem.navigation.next.title_en
-										.toLowerCase()
-										.replace(/ /g, "-")}`}
+									href={`/books/${id}/${poem.navigation.next.title_en.toLowerCase().replace(/ /g, "-")}`}
 									className="group relative overflow-hidden flex flex-row-reverse justify-between px-5 py-3 rounded-lg transition-all duration-300 sm:min-w-[250px] sm:max-w-[250px] w-1/2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/50 hover:shadow-md hover:shadow-blue-900/50"
 								>
 									{/* Interactive hover effect */}
@@ -409,23 +380,6 @@ const PoemPage = () => {
 										</span>
 									</div>
 								</Link>
-							) : (
-								<div className="flex flex-row-reverse justify-between px-5 py-3 rounded-lg sm:min-w-[250px] sm:max-w-[250px] w-1/2 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed">
-									<div className="flex items-center space-x-1.5">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											className="h-4 w-4"
-											viewBox="0 0 20 20"
-											fill="currentColor"
-										>
-											<path
-												fillRule="evenodd"
-												d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-												clipRule="evenodd"
-											/>
-										</svg>
-									</div>
-								</div>
 							)}
 						</div>
 						<div><BooksNavigation currentBookId={id} /></div>

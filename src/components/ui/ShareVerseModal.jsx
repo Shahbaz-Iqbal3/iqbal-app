@@ -1,19 +1,13 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X , Download} from "lucide-react";
 import AIStyleSuggestions from "./AIStyleSuggestions";
 import html2canvas from "html2canvas";
 import { createRoot } from "react-dom/client";
-import { 
-	urduFonts, 
-	englishFonts, 
-	stylePresets 
-} from "./shareVerseConstants";
+import { urduFonts, englishFonts, stylePresets } from "./shareVerseConstants";
 
 import VersePreview from "./share-verse/VersePreview";
-import ShareButtons from "./share-verse/ShareButtons";
-import StylePresets from "./share-verse/StylePresets";
 import AdvancedCustomization from "./share-verse/AdvancedCustomization";
 
 // Main component
@@ -27,25 +21,26 @@ export default function ShareVerseModal({
 	poemNameUr,
 	bookName,
 }) {
-	const [activePreset, setActivePreset] = useState("ai");
-	const [showAdvanced, setShowAdvanced] = useState(false);
 	const [style, setStyle] = useState({
 		urduFont: urduFonts[0],
 		englishFont: englishFonts[0],
 		textColor: "#ffffff",
-		backgroundColor: "#1a202c",
-		backgroundImage: "/images/presets/darknature.avif",
-		overlayOpacity: 0.7,
+		backgroundColor: "#000000",
+		backgroundImage: "none",
+		overlayOpacity: 0.5,
 		urduFontSize: 2,
 		englishFontSize: 1.3,
+		aspectRatio: '9/16',
 	});
 	const [selectedLanguages, setSelectedLanguages] = useState({
 		urdu: true,
 		english: true,
 	});
 	const previewRef = useRef(null);
+	const [additionalImages, setAdditionalImages] = useState([]);
+	const [ImageKeyword, setImageKeyword] = useState('')
 
-	// Simplified useEffect for AI style suggestions
+	//  useEffect for AI style suggestions
 	useEffect(() => {
 		let root = null;
 		let isMounted = true;
@@ -72,8 +67,18 @@ export default function ShareVerseModal({
 			}, 0);
 		};
 	}, [isOpen, englishVerse, verse]);
+	useEffect(() => {
+		if (isOpen) {
+		  document.body.classList.add("overflow-hidden");
+		} else {
+		  document.body.classList.remove("overflow-hidden");
+		}
+	
+		// Clean up on unmount
+		return () => document.body.classList.remove("overflow-hidden");
+	  }, [isOpen]);
 
-	// Simplified handleApplyAIStyle function
+	//  handleApplyAIStyle function
 	const handleApplyAIStyle = (aiStyle) => {
 		const matchUrduFont = urduFonts.find((f) => f.id === aiStyle.urduFontId) || urduFonts[0];
 		const matchEnglishFont =
@@ -88,28 +93,18 @@ export default function ShareVerseModal({
 			overlayOpacity: aiStyle.overlayOpacity || style.overlayOpacity,
 			urduFontSize: style.urduFontSize,
 			englishFontSize: style.englishFontSize,
+			aspectRatio: aiStyle.aspectRatio || style.aspectRatio,
 		};
 
 		setStyle(newStyle);
+		setAdditionalImages(aiStyle.additionalImages || []);
+		setImageKeyword(aiStyle.imageKeywords || "no keyword")
 		stylePresets[0].style = newStyle;
-		setActivePreset("ai");
 	};
 
-	// Simplified applyPreset function
-	const applyPreset = (presetId) => {
-		const preset = stylePresets.find((p) => p.id === presetId);
-		if (preset && preset.style) {
-			// Preserve the current font sizes when applying a preset
-			setStyle({
-				...preset.style,
-				urduFontSize: style.urduFontSize,
-				englishFontSize: style.englishFontSize
-			});
-			setActivePreset(presetId);
-		}
-	};
+	
 
-	// Simplified toggleLanguage function
+	//  toggleLanguage function
 	const toggleLanguage = (lang) => {
 		setSelectedLanguages((prev) => ({
 			...prev,
@@ -117,7 +112,7 @@ export default function ShareVerseModal({
 		}));
 	};
 
-	// Simplified generateImage function
+	//  generateImage function
 	const generateImage = async () => {
 		if (!previewRef.current) return null;
 
@@ -129,14 +124,6 @@ export default function ShareVerseModal({
 				allowTaint: true,
 			});
 
-			// Add watermark
-			const ctx = canvas.getContext("2d");
-			const watermarkText = "drallamaiabal.com";
-			ctx.font = "14px Arial";
-			ctx.fillStyle = style.textColor;
-			ctx.textAlign = "center";
-			ctx.fillText(watermarkText, canvas.width / 2, canvas.height - 10);
-
 			return canvas;
 		} catch (error) {
 			console.error("Error generating image:", error);
@@ -144,101 +131,7 @@ export default function ShareVerseModal({
 		}
 	};
 
-	// Simplified handleShare function
-	const handleShare = async (platform) => {
-		const canvas = await generateImage();
-		if (!canvas) return;
-
-		try {
-			const imageBlob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-			const imageUrl = URL.createObjectURL(imageBlob);
-
-			// Create a FormData object to send both image and text
-			const formData = new FormData();
-			formData.append('image', imageBlob, 'verse-image.png');
-			formData.append('text', verse || '');
-			formData.append('url', window.location.href);
-
-			// Different sharing approaches based on platform
-			if (platform === 'twitter') {
-				// Twitter doesn't support direct image upload in URL parameters
-				// We'll use the Web Share API if available, otherwise fall back to text-only
-				if (navigator.share) {
-					try {
-						await navigator.share({
-							title: 'Shared Verse',
-							text: verse || '',
-							url: window.location.href,
-							files: [new File([imageBlob], 'verse-image.png', { type: 'image/png' })]
-						});
-					} catch (err) {
-						console.error('Error sharing:', err);
-						// Fall back to text-only sharing
-						window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-							verse
-						)}&url=${encodeURIComponent(window.location.href)}`, "_blank");
-					}
-				} else {
-					// Fall back to text-only sharing
-					window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-						verse
-					)}&url=${encodeURIComponent(window.location.href)}`, "_blank");
-				}
-			} else if (platform === 'facebook') {
-				// Facebook doesn't support direct image upload in URL parameters
-				// We'll use the Web Share API if available, otherwise fall back to text-only
-				if (navigator.share) {
-					try {
-						await navigator.share({
-							title: 'Shared Verse',
-							text: verse || '',
-							url: window.location.href,
-							files: [new File([imageBlob], 'verse-image.png', { type: 'image/png' })]
-						});
-					} catch (err) {
-						console.error('Error sharing:', err);
-						// Fall back to text-only sharing
-						window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-							window.location.href
-						)}`, "_blank");
-					}
-				} else {
-					// Fall back to text-only sharing
-					window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-						window.location.href
-					)}`, "_blank");
-				}
-			} else if (platform === 'whatsapp') {
-				// WhatsApp doesn't support direct image upload in URL parameters
-				// We'll use the Web Share API if available, otherwise fall back to text-only
-				if (navigator.share) {
-					try {
-						await navigator.share({
-							title: 'Shared Verse',
-							text: verse || '',
-							url: window.location.href,
-							files: [new File([imageBlob], 'verse-image.png', { type: 'image/png' })]
-						});
-					} catch (err) {
-						console.error('Error sharing:', err);
-						// Fall back to text-only sharing
-						window.open(`https://wa.me/?text=${encodeURIComponent(
-							verse + "\n\n" + window.location.href
-						)}`, "_blank");
-					}
-				} else {
-					// Fall back to text-only sharing
-					window.open(`https://wa.me/?text=${encodeURIComponent(
-						verse + "\n\n" + window.location.href
-					)}`, "_blank");
-				}
-			}
-		} catch (error) {
-			console.error("Error sharing:", error);
-		}
-	};
-
-	// Simplified handleDownload function
+	//  handleDownload function
 	const handleDownload = async () => {
 		const canvas = await generateImage();
 		if (!canvas) return;
@@ -265,6 +158,8 @@ export default function ShareVerseModal({
 		}
 	};
 
+
+
 	return (
 		<AnimatePresence>
 			{isOpen && (
@@ -279,25 +174,25 @@ export default function ShareVerseModal({
 						animate={{ scale: 1, opacity: 1, y: 0 }}
 						exit={{ scale: 0.95, opacity: 0, y: 20 }}
 						transition={{ type: "spring", damping: 25, stiffness: 300 }}
-						className="bg-white dark:bg-gray-800  shadow-2xl w-full max-w-4xl xl:max-h-[95vh] h-[99vh] absolute bottom-0 rounded-b-none md:rounded-b-2xl rounded-t-2xl       md:relative md:max-h-[80vh] overflow-scroll md:overflow-hidden"
+						className="bg-white dark:bg-gray-800  shadow-2xl w-full max-w-4xl xl:max-h-[95vh] h-[99vh] absolute bottom-0 rounded-b-none md:rounded-b-md rounded-t-md       md:relative  overflow-scroll md:overflow-hidden"
 					>
-						<div className="p-3 sm:p-4 md:p-6">
-							<div className="flex justify-between items-center mb-4 sm:mb-6">
+						<div className="p-2 h-full">
+							<div className="flex justify-between items-center sm:m-1 pb-2">
 								<h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 									Share Verse
 								</h2>
 								<button
 									onClick={onClose}
-									className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all duration-200"
+									className="p-2 hover:bg-gray-100 bg-gray-300 bg-opacity-15 dark:hover:bg-gray-700 rounded-full transition-all duration-200"
 								>
 									<X className="w-4 h-4 sm:w-5 sm:h-5" />
 								</button>
 							</div>
 
-							<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+							<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 h-[90%] ">
 								{/* Preview Panel */}
-								<div className="space-y-4 sm:space-y-6 overflow-y-auto max-h-[70vh]">
-									<VersePreview 
+								<div className=" overflow-y-auto scrollbar-modern ">
+									<VersePreview
 										previewRef={previewRef}
 										style={style}
 										selectedLanguages={selectedLanguages}
@@ -308,57 +203,31 @@ export default function ShareVerseModal({
 										bookName={bookName}
 									/>
 
-									<ShareButtons 
-										handleShare={handleShare}
-										handleDownload={handleDownload}
-									/>
 								</div>
 
 								{/* Controls Panel */}
-								<div className="space-y-4 sm:space-y-6 overflow-y-auto max-h-[50vh] sm:max-h-[70vh] px-2 -mx-3">
-									<StylePresets 
-										activePreset={activePreset}
-										applyPreset={applyPreset}
+								<div className="space-y-4 sm:space-y-6 px-2 overflow-y-auto scrollbar-modern ">
+									
+								<div className="flex justify-center items-center">
+								<button
+                    				onClick={handleDownload}
+                    				className="p-2 sm:p-3 w-full justify-center flex gap-2  bg-gray-900 hover:bg-gray-900/60  text-white rounded-md"
+                    				title="Download Image"
+                    			>
+                    				<div><Download className="w-4 h-4 sm:w-5 sm:h-5" /></div>
+									<div>Download Image</div>
+                    			</button>
+								</div>
+									<AdvancedCustomization
+										style={style}
+										setStyle={setStyle}
+										selectedLanguages={selectedLanguages}
+										toggleLanguage={toggleLanguage}
+										handleFileUpload={handleFileUpload}
+										additionalImages={additionalImages}
+										ImageKeyword={ImageKeyword}
+										onSelectBackgroundImage={(img) => setStyle({ ...style, backgroundImage: img })}
 									/>
-
-									{/* Advanced Customization Section (always show if showAdvanced is true, no hide button) */}
-									{showAdvanced && (
-										<AdvancedCustomization 
-											showAdvanced={showAdvanced}
-											style={style}
-											setStyle={setStyle}
-											selectedLanguages={selectedLanguages}
-											toggleLanguage={toggleLanguage}
-											handleFileUpload={handleFileUpload}
-										/>
-									)}
-
-									{/* Advanced Customization Button (show only if not already shown) */}
-									{!showAdvanced && (
-										<div className="mt-4">
-											<button
-												onClick={() => setShowAdvanced(true)}
-												className="w-full py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 group bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-											>
-												<span className="text-sm font-medium">
-													Show Advanced Customization
-												</span>
-												<svg
-													className="w-4 h-4 transform transition-transform duration-200"
-													fill="none"
-													stroke="currentColor"
-													viewBox="0 0 24 24"
-												>
-													<path
-														strokeLinecap="round"
-														strokeLinejoin="round"
-														strokeWidth={2}
-														d="M19 9l-7 7-7-7"
-													/>
-												</svg>
-											</button>
-										</div>
-									)}
 								</div>
 							</div>
 						</div>
