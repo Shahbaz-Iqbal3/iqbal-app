@@ -5,26 +5,27 @@ const STOPWORDS = new Set([
   'that', 'were', 'was', 'it', 'for', 'at', 'by', 'this', 'from', 'as', 'but', 'or'
 ]);
 
-// Extract top 2–3 meaningful keywords
+// Extract first 2–3 meaningful keywords (no frequency logic)
 function extractTopKeywords(text, max = 1) {
   const words = text.toLowerCase().match(/\b\w+\b/g) || [];
 
-  const frequencyMap = {};
-  const orderMap = {};
+  const meaningfulWords = words.filter(
+    word => !STOPWORDS.has(word) && word.length > 2
+  );
 
-  words.forEach((word, index) => {
-    if (!STOPWORDS.has(word) && word.length > 2) {
-      frequencyMap[word] = (frequencyMap[word] || 0) + 1;
-      if (orderMap[word] === undefined) orderMap[word] = index; // first appearance
+  // Return the first unique meaningful words (max 3)
+  const seen = new Set();
+  const result = [];
+
+  for (const word of meaningfulWords) {
+    if (!seen.has(word)) {
+      seen.add(word);
+      result.push(word);
     }
-  });
+    if (result.length >= max) break;
+  }
 
-  return Object.entries(frequencyMap)
-    .sort((a, b) =>
-      b[1] === a[1] ? orderMap[a[0]] - orderMap[b[0]] : b[1] - a[1]
-    )
-    .slice(0, max)
-    .map(([word]) => word);
+  return result;
 }
 
 async function fetchUnsplashImages(keywords, count = 4) {

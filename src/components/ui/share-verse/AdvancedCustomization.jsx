@@ -66,7 +66,6 @@ const AdvancedCustomization = ({
 				toggleLanguage={toggleLanguage} 
 			/>
 			
-			<FontCustomization style={style} setStyle={setStyle} />
 			{/* Aspect Ratio Selection */}
 			<div>
 			  <div className="mb-2 font-semibold text-sm text-gray-700 dark:text-gray-200">Aspect Ratio</div>
@@ -167,6 +166,7 @@ const AdvancedCustomization = ({
 					</div>
 				)}
 			</div>
+			<FontCustomization style={style} setStyle={setStyle} />
 			
 			<ColorCustomization style={style} setStyle={setStyle} />
 			
