@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaFacebook, AiFillTikTok, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, FaTiktok, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -29,7 +29,7 @@ const Footer = () => {
               <FaFacebook className="mr-1" /> Facebook
             </a></li>
             <li><a href="https://www.tiktok.com/@drallamaiqbal_com" className="hover:text-gray-900 dark:hover:text-white transition duration-200 flex items-center">
-              <AiFillTikTok className="mr-1" /> Tiktok
+              <FaTiktok className="mr-1" /> Tiktok
             </a></li>
             <li><a href="https://www.instagram.com/drallamaiqbal_com/" className="hover:text-gray-900 dark:hover:text-white transition duration-200 flex items-center">
               <FaInstagram className="mr-1" /> Instagram
