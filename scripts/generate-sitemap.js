@@ -111,13 +111,6 @@ function generateRobotsTxt() {
 User-agent: *
 Allow: /
 
-# Disallow admin, user, and API routes
-Disallow: /admin
-Disallow: /user
-Disallow: /api
-Disallow: /auth
-Disallow: /hooks
-Disallow: /contexts
 
 # Sitemap
 Sitemap: ${baseUrl}/sitemap.xml
