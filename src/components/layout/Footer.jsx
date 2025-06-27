@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, AiFillTikTok, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -25,13 +25,13 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Follow Us</h3>
           <ul className="text-gray-600 dark:text-gray-400 text-sm space-y-2">
-            <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition duration-200 flex items-center">
+            <li><a href="https://www.facebook.com/people/Drallamaiqbalcom/61577850390192/" className="hover:text-gray-900 dark:hover:text-white transition duration-200 flex items-center">
               <FaFacebook className="mr-1" /> Facebook
             </a></li>
-            <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition duration-200 flex items-center">
-              <FaTwitter className="mr-1" /> Twitter
+            <li><a href="https://www.tiktok.com/@drallamaiqbal_com" className="hover:text-gray-900 dark:hover:text-white transition duration-200 flex items-center">
+              <AiFillTikTok className="mr-1" /> Tiktok
             </a></li>
-            <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition duration-200 flex items-center">
+            <li><a href="https://www.instagram.com/drallamaiqbal_com/" className="hover:text-gray-900 dark:hover:text-white transition duration-200 flex items-center">
               <FaInstagram className="mr-1" /> Instagram
             </a></li>
           </ul>
