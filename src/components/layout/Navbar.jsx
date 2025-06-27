@@ -31,7 +31,18 @@ const Navbar = () => {
 			<div className="container mx-auto flex justify-between items-center">
 				<div className="text-lg font-semibold">
 					<Link href="/" className="hover:text-gray-500 dark:text-gray-200 transition duration-300 font-sans">
-						Dr Allama Iqbal
+					<div className="flex  ">
+						<div>
+							<Image 
+								src={"/favicon_io1/android-chrome-512x512.png"}
+								alt={"User avatar"}
+								className={"-m-1"}
+								width={50}
+								height={50}
+							/>
+						</div>
+						<p className="hidden md:block hover:text-gray-100">Dr Allama Iqbal</p>
+					</div>
 					</Link>
 				</div>
 				
