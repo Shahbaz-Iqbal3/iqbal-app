@@ -73,6 +73,7 @@ const AdvancedCustomization = ({
 			    {[
 			      { label: '1:1', value: '1/1' , icon: ""},
 			      { label: '3:4', value: '3/4' , icon: ""},
+			      { label: '4:5', value: '4/5' , icon: ""},
 			      { label: '9:16', value: '9/16' , icon: ""},
 			    ].map(opt => (
 			      <button

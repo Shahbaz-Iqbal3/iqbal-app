@@ -15,6 +15,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { SessionProvider } from "@/components";
 import { ThemeScript } from "@/components/layout/ThemeScript";
 import CookieConsent from "@/components/ui/CookieConsent";
+import TopLoader from 'nextjs-toploader';
 
 // Preload fonts to prevent layout shifts
 const nastaliq = Noto_Nastaliq_Urdu({ 
@@ -141,6 +142,7 @@ export default async function RootLayout({ children }) {
 				<link rel="icon" type="image/png" sizes="512x512" href="/favicon_io1/android-chrome-512x512.png" />
 			</head>
 			<body className={`${nastaliq.variable} ${amiri.variable} ${poppins.variable} ${dancingScript.variable} ${roboto.variable} ${openSans.variable} antialiased min-h-full bg-primary dark:bg-primary-dark`}>
+				<TopLoader color="#2563eb" showSpinner={false} height={3} />
 				<ThemeProvider>
 					<SessionProvider>
 						<NotificationProvider>
@@ -154,6 +156,7 @@ export default async function RootLayout({ children }) {
 						</NotificationProvider>
 					</SessionProvider>
 				</ThemeProvider>
+
 			</body>
 		</html>
 	);

@@ -15,7 +15,9 @@ const VersePreview = ({
 		? 'aspect-[1/1]'
 		: style.aspectRatio === '3/4'
 			? 'aspect-[3/4]'
-			: 'aspect-[9/16]';
+		: style.aspectRatio === '4/5'
+			? 'aspect-[4/5]'
+		: 'aspect-[9/16]';
 
 	return (
 		<div

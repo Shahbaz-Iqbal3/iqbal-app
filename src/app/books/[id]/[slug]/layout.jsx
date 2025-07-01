@@ -108,6 +108,19 @@ export async function generateMetadata({ params }) {
     }
 }
 
-export default function PoemLayout({ children }) {
-    return children;
+import SidebarWithFetch from '@/components/ui/SidebarWithFetch';
+import React from 'react';
+
+export default function PoemLayout({ children, params }) {
+    return (
+        <div className="flex min-h-screen flex-row-reverse">
+            {/* Sidebar only on md+ screens */}
+            <div className="hidden md:block w-64 h-screen sticky top-0">
+                <SidebarWithFetch bookId={params.id} slug={params.slug} />
+            </div>
+            <main className="flex-1">
+                {children}
+            </main>
+        </div>
+    );
 } 
