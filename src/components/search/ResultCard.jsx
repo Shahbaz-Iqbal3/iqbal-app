@@ -15,23 +15,23 @@ const ResultCard = ({ item, index, query }) => (
     >
         {/* Content Type Badge */}
         <div className="flex justify-between items-start mb-4">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ">
                 <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                    item.stanza_order 
+                    item.type === 'stanza'
                         ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300' 
                         : 'bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300'
                 }`}>
-                    {item.stanza_order ? 'Stanza' : 'Poem'}
+                    {item.type === 'stanza' ? `Stanza ${item.stanza_order}` : 'Poem'}
                 </span>
-                {item.poem_details?.title_en && (
-                    <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                        Poem: {item.poem_details.title_en.toLowerCase()} <br />
-                        Book: {DEFAULT_BOOKS.find(book => book.id === item.poem_details.book_id)?.title_en}  
-                    </span>
+               
+                {item.title_ur && (
+                    <div className="text-md text-gray-500 dark:text-gray-400 font-amiri">
+                        Poem: {item.title_ur} 
+                    </div>
                 )}
-                {!item.poem_details && item.title_en && (
+                {item.book_name && (
                     <span className="text-xs text-gray-500 dark:text-gray-400">
-                         From: {DEFAULT_BOOKS.find(book => book.id === item.book_id)?.title_en}
+                        Book: {item.book_name}
                     </span>
                 )}
             </div>

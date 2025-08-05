@@ -16,7 +16,10 @@ export default function PoemDisplay({ stanza, poemId, bookmarks, userId, bookId,
 	const initialBookmarked = bookmarks?.some((b) => b.stanza_id === stanza.id);
 
 	return (
-		<div className="sm:py-12 py-8 border-b border-gray-200 dark:border-gray-700 flex sm:flex-row-reverse flex-col items-center transition-colors duration-300">
+		<div 
+			id={`stanza-${stanza.stanza_order}`}
+			className="sm:py-12 py-8 border-b border-gray-200 dark:border-gray-700 flex sm:flex-row-reverse flex-col items-center transition-colors duration-300"
+		>
 			<div className="w-[calc(100%-10px)] px-3 overflow-auto">
 				<div className="flex flex-col">
 					{Urdu.map((line, index) => (

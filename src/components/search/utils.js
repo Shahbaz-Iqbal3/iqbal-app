@@ -30,20 +30,16 @@ export const highlightText = (text, searchQuery) => {
 
 // Helper to get the correct poem and book IDs for links
 export const getItemLink = (item) => {
-    // For stanzas with poem_details
-    if (item.stanza_order && item.poem_details) {
-        const poemId = item.poem_details.title_en.toLowerCase().replace(/ /g, "-") || "";
-        const bookId = item.poem_details.book_id || "";
-        const filteredBooks = DEFAULT_BOOKS.filter(book => book.id === bookId);
-        const bookTitle = filteredBooks[0]?.title_en || "";
+    // For stanzas
+    if (item.type === 'stanza') {
+        const poemId = item.title_en?.toLowerCase().replace(/ /g, "-") || "";
+        const bookTitle = item.book_name || "";
         return `/books/${bookTitle}/${poemId}?selected=true#stanza-${item.stanza_order}`;
     }
-    // For poems with stanzas
-    else if (item.content_order) {
-        const poemId = item?.title_en.toLowerCase().replace(/ /g, "-") || "";
-        const bookId = item?.book_id || "";
-        const filteredBooks = DEFAULT_BOOKS.filter(book => book.id === bookId);
-        const bookTitle = filteredBooks[0]?.title_en || "";
+    // For poems
+    else if (item.type === 'poem') {
+        const poemId = item.title_en?.toLowerCase().replace(/ /g, "-") || "";
+        const bookTitle = item.book_name || "";
         return `/books/${bookTitle}/${poemId}?selected=true`;
     }
     

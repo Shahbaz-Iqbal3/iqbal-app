@@ -27,14 +27,12 @@ export default function SearchResults() {
 	// Get URL params with defaults - support both "query" and "q" parameter names
 	const initialQuery = searchParams.get("query") || searchParams.get("q") || "";
 	const initialContentType = searchParams.get("contentType") || "all";
-	const initialLanguage = searchParams.get("language") || "all";
 	const initialBookId = searchParams.get("bookId") || "";
 	const initialPage = parseInt(searchParams.get("page") || "1");
 
 	// State
 	const [query, setQuery] = useState(initialQuery);
 	const [contentType, setContentType] = useState(initialContentType);
-	const [language, setLanguage] = useState(initialLanguage);
 	const [bookId, setBookId] = useState(initialBookId);
 	const [page, setPage] = useState(initialPage);
 	const [results, setResults] = useState([]);
@@ -95,7 +93,6 @@ export default function SearchResults() {
 
 			// Use parameters if provided, otherwise use state values
 			const finalContentType = contentTypeParam !== undefined ? contentTypeParam : contentType;
-			const finalLanguage = languageParam !== undefined ? languageParam : language;
 			const finalBookId = bookIdParam !== undefined ? bookIdParam : bookId;
 
 			// If we're on the search page, update the URL params
@@ -103,7 +100,6 @@ export default function SearchResults() {
 				updateURLParams({
 					query,
 					contentType: finalContentType,
-					language: finalLanguage,
 					bookId: finalBookId,
 					page: searchPage.toString(),
 				});
@@ -113,7 +109,6 @@ export default function SearchResults() {
 			const params = new URLSearchParams();
 			params.append("query", query.trim());
 			params.append("contentType", finalContentType);
-			params.append("language", finalLanguage);
 			params.append("page", searchPage.toString());
 			params.append("limit", "10"); // Fixed limit
 
@@ -153,7 +148,7 @@ export default function SearchResults() {
 			// Execute the async function
 			fetchResults();
 		},
-		[query, contentType, language, bookId, page, pathname, updateURLParams]
+		[query, contentType, bookId, page, pathname, updateURLParams]
 	);
 
 	// Handle page change
@@ -186,7 +181,6 @@ export default function SearchResults() {
 		const params = new URLSearchParams();
 		params.append("query", query.trim());
 		params.append("contentType", contentType);
-		params.append("language", language);
 		params.append("page", newPage.toString());
 		params.append("limit", "10"); // Fixed limit
 
@@ -236,7 +230,6 @@ export default function SearchResults() {
 		if (initialQuery.trim()) {
 			setQuery(initialQuery);
 			setContentType(initialContentType);
-			setLanguage(initialLanguage);
 			setBookId(initialBookId);
 
 			// Always clear previous errors
@@ -260,7 +253,6 @@ export default function SearchResults() {
 			const params = new URLSearchParams();
 			params.append("query", initialQuery.trim());
 			params.append("contentType", initialContentType);
-			params.append("language", initialLanguage);
 			params.append("page", searchPage.toString());
 			params.append("limit", "10"); // Fixed limit
 
@@ -297,7 +289,7 @@ export default function SearchResults() {
 			// Execute the async function
 			fetchResults();
 		}
-	}, [initialQuery, initialPage, initialContentType, initialLanguage, initialBookId]);
+	}, [initialQuery, initialPage, initialContentType, initialBookId]);
    
 	return (
 		<div className="w-full max-w-5xl mx-auto p-4 md:p-6 bg-primary dark:bg-primary-dark transition-colors">
@@ -317,9 +309,7 @@ export default function SearchResults() {
 					{initialQuery  && !error && (
 						<CompactFilterSection
 							contentType={contentType}
-							setContentType={setContentType}
-							language={language}
-							setLanguage={setLanguage}
+							setContentType={setContentType}					
 							bookId={bookId}
 							setBookId={setBookId}
 							availableBooks={DEFAULT_BOOKS}
