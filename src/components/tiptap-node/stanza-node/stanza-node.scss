@@ -1,0 +1,26 @@
+/* src/components/tiptap-node/stanza-node/stanza-node.scss */
+.stanza-block {
+  transition: background 0.2s ease;
+}
+
+.stanza-block:hover {
+  background: rgba(59, 130, 246, 0.15); /* Tailwind blue-500/15 */
+  cursor: pointer;
+}
+/* src/components/tiptap-node/stanza-node/stanza-node.scss (optional) */
+.stanza-block {
+  transition: box-shadow .12s ease, border-color .12s ease;
+}
+.stanza-block[data-type="stanza"][draggable="true"] {
+  /* show a subtle drag cursor */
+  cursor: grab;
+}
+.stanza-block:active {
+  cursor: grabbing;
+}
+.prose-stanza p {
+  margin: 0; /* paragraphs inside stanza look compact */
+  line-height: 1.6;
+  font-family: "Georgia", serif;
+  font-size: larger;
+}

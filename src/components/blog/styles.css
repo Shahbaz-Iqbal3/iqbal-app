@@ -1,0 +1,162 @@
+/* ================================
+   HEADINGS
+================================ */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6,
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 2.2rem 0 1rem;
+}
+
+.ProseMirror h1,
+.prose h1 {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.ProseMirror h2,
+.prose h2 {
+  font-size: clamp(1.5rem, 2.4vw, 1.75rem);
+}
+
+.ProseMirror h3,
+.prose h3 {
+  font-size: 1.25rem;
+}
+
+.ProseMirror h4,
+.prose h4 {
+  font-size: 1rem;
+}
+
+/* Images */
+.ProseMirror img,
+.prose img {
+  margin: 2rem auto !important;
+}
+
+/* ================================
+   PARAGRAPHS & TEXT
+================================ */
+.ProseMirror p,
+.prose p {
+  margin: 0 0 1.25rem;
+}
+
+.ProseMirror strong,
+.prose strong {
+  font-weight: 600;
+}
+
+.ProseMirror em,
+.prose em {
+  font-style: italic;
+}
+
+.ProseMirror small,
+.prose small {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* ================================
+   LINKS
+================================ */
+.ProseMirror a,
+.prose a {
+  color: #aab6d0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.ProseMirror a:hover,
+.prose a:hover {
+  color: #e8eaf0;
+}
+
+/* ================================
+   LISTS
+================================ */
+.ProseMirror ul,
+.ProseMirror ol,
+.prose ul,
+.prose ol {
+  margin: 0 0 1.25rem 1.25rem;
+  padding: 0;
+}
+
+.ProseMirror li,
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror ul,
+.prose ul {
+  list-style-type: disc;
+}
+
+.ProseMirror ol,
+.prose ol {
+  list-style-type: decimal;
+}
+
+/* ================================
+   BLOCKQUOTES
+================================ */
+.ProseMirror blockquote,
+.prose blockquote {
+  margin: 2rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid #000000;
+  background-color: #183d64;
+  color: #bfc9d9;
+  border-end-end-radius: 7px;
+  border-start-end-radius: 7px;
+  font-style: italic;
+}
+
+.ProseMirror blockquote p,
+.prose blockquote p {
+  margin: 0;
+}
+
+/* ================================
+   CODE
+================================ */
+.ProseMirror code,
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  background-color: #f3f4f6;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #1a1919;
+}
+
+.ProseMirror pre,
+.prose pre {
+  background-color: #111827;
+  color: #e5e7eb;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.ProseMirror pre code,
+.prose pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}

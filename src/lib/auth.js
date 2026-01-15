@@ -78,17 +78,18 @@ export const authOptions = {
 			// Fetch the updated user image from Supabase
 			const { data: userData } = await supabase
 				.from("users")
-				.select("image, id, username")
+				.select("image, id, username, role")
 				.eq("email", session.user.email)
 				.single();
-
-			if (userData?.image) {
-				session.user.image = userData.image; // Override Google image with Supabase image
-			}
-			if (session?.user) {
-				session.user.id = userData.id; // Add user ID from token to session
-				session.user.username = userData.username;
-			}
+				
+				if (userData?.image) {
+					session.user.image = userData.image; // Override Google image with Supabase image
+				}
+				if (session?.user) {
+					session.user.id = userData.id; // Add user ID from token to session
+					session.user.username = userData.username;
+					session.user.role = userData.role;
+				}
 			return session;
 		},
 	},

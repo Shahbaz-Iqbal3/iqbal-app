@@ -5,7 +5,7 @@ const OverlayOpacityCustomization = ({ style, setStyle }) => {
 	
 	return (
 		<div>
-			<label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
+			<label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 ">
 				Background Overlay Opacity
 			</label>
 			<input

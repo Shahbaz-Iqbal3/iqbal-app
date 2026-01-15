@@ -1,0 +1,204 @@
+/* ================================
+   PROSE CONTENT WRAPPER
+================================ */
+.prose-content {
+  font-size: 16px;
+  color: #f0f0f0;
+}
+
+/* ================================
+   HEADINGS
+================================ */
+.prose-content h1,
+.prose-content h2,
+.prose-content h3,
+.prose-content h4,
+.prose-content h5,
+.prose-content h6 {
+  font-weight: 600;
+  margin: 2.2rem 0 1rem;
+  color: #ffffff;
+}
+
+.prose-content h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+}
+
+.prose-content h2 {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.prose-content h3 {
+  font-size: 1.5rem;
+}
+
+.prose-content h4 {
+  font-size: 1.25rem;
+}
+
+.prose-content h5 {
+  font-size: 1.1rem;
+}
+
+.prose-content h6 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ================================
+   PARAGRAPHS & TEXT
+================================ */
+.prose-content p {
+  margin: 0 0 1.6rem;
+  color: #ffffff;
+}
+
+.prose-content strong {
+  font-weight: 600;
+}
+
+.prose-content em {
+  font-style: italic;
+  color: #ffe4e4;
+}
+
+.prose-content small {
+  font-size: 0.875rem;
+  color: #d1d5db;
+}
+
+/* ================================
+   LINKS
+================================ */
+.prose-content a {
+  color: #80ccff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.prose-content a:hover {
+  color: #37a3f0;
+}
+
+/* ================================
+   LISTS
+================================ */
+.prose-content ul,
+.prose-content ol {
+  margin: 0 0 1.5rem 1.25rem;
+  padding: 0;
+}
+
+.prose-content li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-content ul {
+  list-style-type: disc;
+}
+
+.prose-content ol {
+  list-style-type: decimal;
+}
+
+/* ================================
+   BLOCKQUOTES
+================================ */
+.prose-content blockquote {
+  margin: 2rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid #007acc;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #e5e7eb;
+  font-style: italic;
+}
+
+.prose-content blockquote p {
+  margin: 0;
+}
+
+/* ================================
+   CODE
+================================ */
+.prose-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  background-color: #1f2937;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #e5e7eb;
+}
+
+.prose-content pre {
+  background-color: #111827;
+  color: #e5e7eb;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.prose-content pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* ================================
+   IMAGES
+================================ */
+.prose-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px auto !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* ================================
+   TABLES
+================================ */
+.prose-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.prose-content th,
+.prose-content td {
+  border: 1px solid #374151;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.prose-content th {
+  background-color: #1f2937;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* ================================
+   HR
+================================ */
+.prose-content hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.4);
+  margin: 3rem 0;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media screen and (max-width: 600px) {
+  .prose-content {
+    font-size: 14px;
+  }
+
+  .prose-content h2 {
+    font-size: 1.5em;
+  }
+}

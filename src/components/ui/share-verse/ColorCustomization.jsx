@@ -2,14 +2,14 @@ import React from "react";
 
 const ColorCustomization = ({ style, setStyle }) => {
 	return (
-		<div className="space-y-4 sm:space-y-6">
+		<div className="flex gap-2">
 			{/* Text Color */}
 			<div>
 				<label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
 					Text Color
 				</label>
 				<div
-					className="w-full h-6 sm:h-8 bg-white rounded-md border-2 border-gray-300"
+					className="w-28 h-6 sm:h-8 rounded-md"
 					style={{ backgroundColor: style.textColor }}
 				>
 					<input
@@ -18,7 +18,7 @@ const ColorCustomization = ({ style, setStyle }) => {
 						onChange={(e) =>
 							setStyle({ ...style, textColor: e.target.value })
 						}
-						className="w-full h-6 sm:h-8 p-1 border-2 rounded-xl cursor-pointer opacity-0"
+						className="w-full h-6 sm:h-8 p-1   rounded-xl cursor-pointer opacity-0"
 					/>
 				</div>
 			</div>
@@ -29,7 +29,7 @@ const ColorCustomization = ({ style, setStyle }) => {
 					Background Color
 				</label>
 				<div
-					className="w-full h-6 sm:h-8 bg-white rounded-md border-2 border-gray-300"
+					className="w-28 h-6 sm:h-8 bg-white rounded-md   border-gray-300"
 					style={{ backgroundColor: style.backgroundColor }}
 				>
 					<input
@@ -38,7 +38,7 @@ const ColorCustomization = ({ style, setStyle }) => {
 						onChange={(e) =>
 							setStyle({ ...style, backgroundColor: e.target.value })
 						}
-						className="w-full h-6 sm:h-8 p-1 border-2 rounded-xl cursor-pointer opacity-0"
+						className="w-full h-6 sm:h-8 p-1   rounded-xl cursor-pointer opacity-0"
 					/>
 				</div>
 			</div>

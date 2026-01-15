@@ -5,11 +5,28 @@ const FontCustomization = ({ style, setStyle }) => {
 	return (
 		<div className="space-y-4 sm:space-y-6">
 			{/* Urdu Font Selection */}
-			<div>
-				<label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
-					Urdu Font
-				</label>
+			<div className="flex gap-2 justify-between">
+				<div className="flex flex-wrap items-center justify-start gap-1 sm:gap-2">
+				
+					{englishFonts.map((font) => (
+						<button
+							key={font.id}
+							onClick={() => setStyle({ ...style, englishFont: font })}
+							className={`px-2 sm:px-3 py-1 border rounded-md ${
+								style.englishFont.id === font.id
+									? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
+									: "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+							}`}
+						>
+							<div className="flex flex-col items-center">
+								<span className={`text-base sm:text-lg mt-1 ${font.font}`}>Aa</span>
+							</div>
+						</button>
+					))}
+				</div>
+				
 				<div className="flex gap-1 sm:gap-2 justify-start">
+				
 					{urduFonts.map((font) => (
 						<button
 							key={font.id}
@@ -28,6 +45,11 @@ const FontCustomization = ({ style, setStyle }) => {
 						</button>
 					))}
 				</div>
+				
+			</div>
+
+			{/* English Font Selection */}
+			<div>
 				
 				{/* Urdu Font Size Slider */}
 				<div className="mt-3">
@@ -54,31 +76,6 @@ const FontCustomization = ({ style, setStyle }) => {
 						</span>
 					</div>
 				</div>
-			</div>
-
-			{/* English Font Selection */}
-			<div>
-				<label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
-					English Font
-				</label>
-				<div className="flex flex-wrap items-center justify-start gap-1 sm:gap-2">
-					{englishFonts.map((font) => (
-						<button
-							key={font.id}
-							onClick={() => setStyle({ ...style, englishFont: font })}
-							className={`p-1 sm:p-2 py-0 border rounded-md ${
-								style.englishFont.id === font.id
-									? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-									: "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-							}`}
-						>
-							<div className="flex flex-col items-center">
-								<span className={`text-base sm:text-lg mt-1 ${font.font}`}>Aa</span>
-							</div>
-						</button>
-					))}
-				</div>
-				
 				{/* English Font Size Slider */}
 				<div className="mt-3">
 					<label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

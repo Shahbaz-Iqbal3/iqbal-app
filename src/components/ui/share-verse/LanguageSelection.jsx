@@ -4,12 +4,7 @@ import { Globe, Check } from "lucide-react";
 const LanguageSelection = ({ selectedLanguages, toggleLanguage }) => {
 	return (
 		<div className="space-y-3 sm:space-y-4">
-			<h3 className="text-base sm:text-lg font-semibold flex items-center">
-				<Globe className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-blue-500" />
-				<span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-					Languages
-				</span>
-			</h3>
+			<div className="mb-2 font-semibold text-sm text-gray-700 dark:text-gray-200">Language</div>
 			<div className="flex gap-4 sm:gap-6">
 				<label className="flex items-center space-x-2 sm:space-x-3 cursor-pointer group">
 					<div
