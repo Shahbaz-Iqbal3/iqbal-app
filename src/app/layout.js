@@ -16,6 +16,7 @@ import { SessionProvider } from "@/components";
 import { ThemeScript } from "@/components/layout/ThemeScript";
 import CookieConsent from "@/components/ui/CookieConsent";
 import TopLoader from 'nextjs-toploader';
+import { Analytics } from '@vercel/analytics/next';
 
 // Preload fonts to prevent layout shifts
 const nastaliq = Noto_Nastaliq_Urdu({ 
@@ -156,7 +157,7 @@ export default async function RootLayout({ children }) {
 						</NotificationProvider>
 					</SessionProvider>
 				</ThemeProvider>
-
+				<Analytics />
 			</body>
 		</html>
 	);
