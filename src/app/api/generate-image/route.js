@@ -3,6 +3,24 @@ import sharp from 'sharp';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NextResponse } from 'next/server';
+import ArabicPersianReshaperPkg from 'arabic-persian-reshaper';
+
+const { ArabicShaper } = ArabicPersianReshaperPkg;
+
+// Pre-shape Urdu/Arabic-script text into joined presentation-form glyphs.
+// Satori (via opentype.js) can't run the complex GSUB contextual substitution
+// that real Nastaliq/Naskh fonts use for letter-joining, so we resolve the
+// joining ourselves before satori ever sees the string.
+function reshapeUrdu(text) {
+    const str = String(text || '');
+    if (!str) return '';
+    try {
+        return ArabicShaper.convertArabic(str);
+    } catch (err) {
+        console.error('Urdu reshape failed, falling back to raw text:', err.message);
+        return str;
+    }
+}
 
 const cinzelRegular = readFileSync(join(process.cwd(), 'public/fonts/Cinzel-Regular.ttf'));
 const cinzelBold = readFileSync(join(process.cwd(), 'public/fonts/Cinzel-Bold.ttf'));
@@ -219,7 +237,7 @@ async function renderStanzaCard(body) {
                                             unicodeBidi: 'bidi-override',
                                             textAlign: isLeftAccent ? 'left' : 'center',
                                         },
-                                        children: String(body.poem_title_ur || '')
+                                        children: reshapeUrdu(body.poem_title_ur)
                                     }
                                 }
                             ]
@@ -266,7 +284,7 @@ async function renderStanzaCard(body) {
                                                     unicodeBidi: 'bidi-override',
                                                     textAlign: 'center',
                                                 },
-                                                children: String(line)
+                                                children: reshapeUrdu(line)
                                             }
                                         }))
                                     }
@@ -331,6 +349,7 @@ async function renderHookCard(body) {
     const { isLeftAccent, borderWidth } = getLayoutProps(layout, palette);
     const hookText = String(body.hook || '');
     const hookFontSize = calcHookFontSize(hookText);
+    const hookTextShaped = reshapeUrdu(hookText);
 
     return await satori(
         {
@@ -381,7 +400,7 @@ async function renderHookCard(body) {
                                         unicodeBidi: 'bidi-override',
                                         textAlign: 'center',
                                     },
-                                    children: hookText
+                                    children: hookTextShaped
                                 }
                             }]
                         }
@@ -407,11 +426,6 @@ export async function POST(request) {
     try {
         const body = await request.json();
         const itemType = body.item_type || 'stanza';
-
-        // TEMP DEBUG - remove after confirming Urdu text integrity
-        const sampleUrdu = body.urdu_lines?.[0] || body.hook || body.poem_title_ur || '';
-        console.log('DEBUG raw urdu sample:', sampleUrdu);
-        console.log('DEBUG char codes:', [...sampleUrdu].slice(0, 10).map(c => c.charCodeAt(0)));
 
         let svg;
         if (itemType === 'hook') {
