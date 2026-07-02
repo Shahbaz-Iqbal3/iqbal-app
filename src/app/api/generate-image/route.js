@@ -408,6 +408,11 @@ export async function POST(request) {
         const body = await request.json();
         const itemType = body.item_type || 'stanza';
 
+        // TEMP DEBUG - remove after confirming Urdu text integrity
+        const sampleUrdu = body.urdu_lines?.[0] || body.hook || body.poem_title_ur || '';
+        console.log('DEBUG raw urdu sample:', sampleUrdu);
+        console.log('DEBUG char codes:', [...sampleUrdu].slice(0, 10).map(c => c.charCodeAt(0)));
+
         let svg;
         if (itemType === 'hook') {
             svg = await renderHookCard(body);
