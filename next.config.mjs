@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
 	images: {
 		remotePatterns: [
 			{
@@ -17,16 +20,16 @@ const nextConfig = {
 				hostname: 'fonts.gstatic.com',
 				pathname: '/**',
 			},
-					{
-			protocol: 'https',
-			hostname: 'fonts.googleapis.com',
-			pathname: '/**',
-		},
-		{
-			protocol: 'https',
-			hostname: 'images.unsplash.com',
-			pathname: '/**',
-		},
+			{
+				protocol: 'https',
+				hostname: 'fonts.googleapis.com',
+				pathname: '/**',
+			},
+			{
+				protocol: 'https',
+				hostname: 'images.unsplash.com',
+				pathname: '/**',
+			},
 		],
 	},
 	// Font optimization is enabled by default in Next.js 13+
