@@ -39,6 +39,10 @@ function calcEnglishFontSize(maxLen, lineCount) {
   return Math.max(size, 12);
 }
 
+export async function GET() {
+  return NextResponse.json({ message: 'This endpoint is for POST requests only.' }, { status: 405 });
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
