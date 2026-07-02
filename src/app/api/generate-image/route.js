@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
 const cinzelRegular = readFileSync(join(process.cwd(), 'public/fonts/Cinzel-Regular.ttf'));
 const cinzelBold = readFileSync(join(process.cwd(), 'public/fonts/Cinzel-Bold.ttf'));
 const montserrat = readFileSync(join(process.cwd(), 'public/fonts/Montserrat.ttf'));
-const nastaleeq = readFileSync(join(process.cwd(), 'public/fonts/JTUHjlg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Hw5aXo.woff2'));
+const nastaleeq = readFileSync(join(process.cwd(), 'public/fonts/JameelNooriNastaleeq.ttf'));
 
 const palettes = [
   { bg: '#16120e', border: '#c9a054', text: '#f5e6c4', accent: '#a48953', englishText: '#d1c4a5' },
