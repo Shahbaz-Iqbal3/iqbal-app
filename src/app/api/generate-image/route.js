@@ -1,31 +1,23 @@
-import satori from 'satori';
-import sharp from 'sharp';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NextResponse } from 'next/server';
-import ArabicPersianReshaperPkg from 'arabic-persian-reshaper';
+import chromium from '@sparticuz/chromium';
+import puppeteer from 'puppeteer-core';
 
-const { ArabicShaper } = ArabicPersianReshaperPkg;
-
-// Pre-shape Urdu/Arabic-script text into joined presentation-form glyphs.
-// Satori (via opentype.js) can't run the complex GSUB contextual substitution
-// that real Nastaliq/Naskh fonts use for letter-joining, so we resolve the
-// joining ourselves before satori ever sees the string.
-function reshapeUrdu(text) {
-    const str = String(text || '');
-    if (!str) return '';
-    try {
-        return ArabicShaper.convertArabic(str);
-    } catch (err) {
-        console.error('Urdu reshape failed, falling back to raw text:', err.message);
-        return str;
-    }
+// Fonts are loaded as base64 and embedded directly into the HTML via @font-face,
+// so Chromium (via Puppeteer) renders them exactly like a browser would —
+// full native Arabic/Urdu shaping, no Satori GSUB limitations.
+function fontBase64(filename) {
+    const data = readFileSync(join(process.cwd(), 'public/fonts', filename));
+    return data.toString('base64');
 }
 
-const cinzelRegular = readFileSync(join(process.cwd(), 'public/fonts/Cinzel-Regular.ttf'));
-const cinzelBold = readFileSync(join(process.cwd(), 'public/fonts/Cinzel-Bold.ttf'));
-const montserrat = readFileSync(join(process.cwd(), 'public/fonts/Montserrat-SemiBold.ttf'));
-const notoArabic = readFileSync(join(process.cwd(), 'public/fonts/NotoNaskhArabic.ttf'));
+const FONT_DATA = {
+    cinzelRegular: fontBase64('Cinzel-Regular.ttf'),
+    cinzelBold: fontBase64('Cinzel-Bold.ttf'),
+    montserrat: fontBase64('Montserrat-SemiBold.ttf'),
+    notoArabic: fontBase64('NotoNaskhArabic.ttf'),
+};
 
 const palettes = [
     { bg: '#16120e', border: '#c9a054', text: '#f5e6c4', accent: '#a48953', englishText: '#d1c4a5' },
@@ -36,14 +28,6 @@ const palettes = [
 ];
 
 const layouts = ['centered', 'leftAccent', 'framed'];
-
-const FONTS = [
-    { name: 'Cinzel', data: cinzelRegular, weight: 400, style: 'normal' },
-    { name: 'Cinzel', data: cinzelBold, weight: 700, style: 'normal' },
-    { name: 'Montserrat', data: montserrat, weight: 600, style: 'normal' },
-    { name: 'NotoArabic', data: notoArabic, weight: 400, style: 'normal' },
-    { name: 'NotoArabic', data: notoArabic, weight: 700, style: 'normal' },
-];
 
 function calcUrduFontSize(maxLen, lineCount) {
     let size = 66;
@@ -77,97 +61,120 @@ function calcHookFontSize(text) {
     return Math.max(size, 35);
 }
 
-function getLayoutProps(layout, palette) {
+function getLayoutProps(layout) {
     const isLeftAccent = layout === 'leftAccent';
     const borderWidth = layout === 'framed' ? 32 : 24;
     return { isLeftAccent, borderWidth };
 }
 
-function accentBar(palette) {
-    return {
-        type: 'div',
-        props: {
-            style: {
-                position: 'absolute',
-                left: '0px',
-                top: '0px',
-                width: '14px',
-                height: '1080px',
-                backgroundColor: palette.border,
-            }
-        }
-    };
+// Basic HTML-escaping so poem text can't break the markup.
+function esc(str) {
+    return String(str ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
 }
 
-function brandingFooter(palette, stanzaLabel) {
-    return {
-        type: 'div',
-        props: {
-            style: {
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                marginBottom: '45px',
-            },
-            children: [
-                ...(stanzaLabel ? [{
-                    type: 'div',
-                    props: {
-                        style: {
-                            fontFamily: 'Cinzel',
-                            fontSize: '15px',
-                            fontWeight: 700,
-                            color: palette.border,
-                            letterSpacing: '3px',
-                            marginBottom: '24px',
-                        },
-                        children: stanzaLabel
-                    }
-                }] : []),
-                {
-                    type: 'div',
-                    props: {
-                        style: {
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            gap: '10px',
-                        },
-                        children: [
-                            {
-                                type: 'img',
-                                props: {
-                                    src: 'https://drallamaiqbal.vercel.app/_next/image?url=%2Ffavicon_io1%2Fandroid-chrome-512x512.png&w=64&q=75',
-                                    width: 40,
-                                    height: 40,
-                                    style: { objectFit: 'contain' }
-                                }
-                            },
-                            {
-                                type: 'div',
-                                props: {
-                                    style: {
-                                        fontFamily: 'Montserrat',
-                                        fontSize: '24px',
-                                        fontWeight: 600,
-                                        color: palette.accent,
-                                        letterSpacing: '1.5px',
-                                    },
-                                    children: 'drallamaiqbal.com'
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
+function fontFaceCss() {
+    return `
+        @font-face {
+            font-family: 'Cinzel';
+            src: url(data:font/ttf;base64,${FONT_DATA.cinzelRegular}) format('truetype');
+            font-weight: 400;
+            font-style: normal;
         }
-    };
+        @font-face {
+            font-family: 'Cinzel';
+            src: url(data:font/ttf;base64,${FONT_DATA.cinzelBold}) format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: url(data:font/ttf;base64,${FONT_DATA.montserrat}) format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'NotoArabic';
+            src: url(data:font/ttf;base64,${FONT_DATA.notoArabic}) format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'NotoArabic';
+            src: url(data:font/ttf;base64,${FONT_DATA.notoArabic}) format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+    `;
 }
 
-async function renderStanzaCard(body) {
+function brandingFooterHtml(palette, stanzaLabel) {
+    return `
+        <div class="footer">
+            ${stanzaLabel ? `<div class="stanza-label" style="color:${palette.border}">${esc(stanzaLabel)}</div>` : ''}
+            <div class="brand-row">
+                <img src="https://drallamaiqbal.vercel.app/_next/image?url=%2Ffavicon_io1%2Fandroid-chrome-512x512.png&w=64&q=75" width="40" height="40" />
+                <div class="brand-text" style="color:${palette.accent}">drallamaiqbal.com</div>
+            </div>
+        </div>
+    `;
+}
+
+function baseStyles() {
+    return `
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { width: 1080px; height: 1080px; }
+        .card {
+            width: 1080px;
+            height: 1080px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        .accent-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 14px;
+            height: 1080px;
+        }
+        .footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 45px;
+        }
+        .stanza-label {
+            font-family: 'Cinzel';
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 24px;
+        }
+        .brand-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-text {
+            font-family: 'Montserrat';
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+        }
+    `;
+}
+
+function renderStanzaHtml(body) {
     const palette = palettes[body.palette_index ?? 0] || palettes[0];
     const layout = body.layout || layouts[body.layout_index ?? 0] || 'centered';
-    const { isLeftAccent, borderWidth } = getLayoutProps(layout, palette);
+    const { isLeftAccent, borderWidth } = getLayoutProps(layout);
 
     const urduLines = Array.isArray(body.urdu_lines) ? body.urdu_lines : [];
     const englishLines = Array.isArray(body.english_lines) ? body.english_lines : [];
@@ -179,240 +186,180 @@ async function renderStanzaCard(body) {
     const urduLineHeight = urduLines.length > 5 ? 1.8 : 2.1;
     const englishLineHeight = englishLines.length > 5 ? 1.3 : 1.6;
 
-    return await satori(
-        {
-            type: 'div',
-            props: {
-                style: {
-                    width: '1080px',
-                    height: '1080px',
-                    backgroundColor: palette.bg,
-                    border: `${borderWidth}px solid ${palette.border}`,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    position: 'relative',
-                    boxSizing: 'border-box',
-                },
-                children: [
-                    isLeftAccent ? accentBar(palette) : null,
+    const urduLinesHtml = urduLines.map(line => `
+        <div style="font-family:'NotoArabic'; font-size:${urduFontSize}px; line-height:${urduLineHeight}; font-weight:700; color:${palette.text}; direction:rtl; text-align:center;">
+            ${esc(line)}
+        </div>
+    `).join('');
 
-                    // Header
-                    {
-                        type: 'div',
-                        props: {
-                            style: {
-                                marginTop: '70px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: isLeftAccent ? 'flex-start' : 'center',
-                                width: '900px',
-                                marginLeft: isLeftAccent ? '90px' : '0px',
-                            },
-                            children: [
-                                {
-                                    type: 'div',
-                                    props: {
-                                        style: {
-                                            fontFamily: 'Cinzel',
-                                            fontSize: '16px',
-                                            fontWeight: 700,
-                                            color: palette.border,
-                                            letterSpacing: '4px',
-                                            textTransform: 'uppercase',
-                                        },
-                                        children: String(body.poem_title_en || '')
-                                    }
-                                },
-                                {
-                                    type: 'div',
-                                    props: {
-                                        style: {
-                                            fontFamily: 'NotoArabic',
-                                            fontSize: '35px',
-                                            color: palette.accent,
-                                            marginTop: '18px',
-                                            direction: 'rtl',
-                                            unicodeBidi: 'bidi-override',
-                                            textAlign: isLeftAccent ? 'left' : 'center',
-                                        },
-                                        children: reshapeUrdu(body.poem_title_ur)
-                                    }
-                                }
-                            ]
-                        }
-                    },
+    const englishLinesHtml = englishLines.map(line => `
+        <div style="font-family:'Cinzel'; font-size:${englishFontSize}px; line-height:${englishLineHeight}; color:${palette.englishText}; font-style:italic;">
+            ${esc(line)}
+        </div>
+    `).join('');
 
-                    // Content
-                    {
-                        type: 'div',
-                        props: {
-                            style: {
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                width: '940px',
-                                flexGrow: 1,
-                                justifyContent: 'center',
-                                padding: '0 20px',
-                            },
-                            children: [
-                                // Urdu lines
-                                {
-                                    type: 'div',
-                                    props: {
-                                        style: {
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            direction: 'rtl',
-                                            textAlign: 'center',
-                                            width: '100%',
-                                            marginBottom: '35px',
-                                        },
-                                        children: urduLines.map(line => ({
-                                            type: 'div',
-                                            props: {
-                                                style: {
-                                                    fontFamily: 'NotoArabic',
-                                                    fontSize: `${urduFontSize}px`,
-                                                    lineHeight: urduLineHeight,
-                                                    fontWeight: 700,
-                                                    color: palette.text,
-                                                    direction: 'rtl',
-                                                    unicodeBidi: 'bidi-override',
-                                                    textAlign: 'center',
-                                                },
-                                                children: reshapeUrdu(line)
-                                            }
-                                        }))
-                                    }
-                                },
+    return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="utf-8" />
+    <style>
+        ${fontFaceCss()}
+        ${baseStyles()}
+        .header {
+            margin-top: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: ${isLeftAccent ? 'flex-start' : 'center'};
+            width: 900px;
+            margin-left: ${isLeftAccent ? '90px' : '0px'};
+        }
+        .title-en {
+            font-family: 'Cinzel';
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: ${palette.border};
+        }
+        .title-ur {
+            font-family: 'NotoArabic';
+            font-size: 35px;
+            color: ${palette.accent};
+            margin-top: 18px;
+            direction: rtl;
+            text-align: ${isLeftAccent ? 'left' : 'center'};
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 940px;
+            flex-grow: 1;
+            justify-content: center;
+            padding: 0 20px;
+        }
+        .urdu-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            direction: rtl;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 35px;
+        }
+        .divider {
+            width: 820px;
+            height: 1px;
+            background-color: ${palette.border};
+            opacity: 0.25;
+            margin-bottom: 25px;
+        }
+        .english-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 820px;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="card" style="background-color:${palette.bg}; border:${borderWidth}px solid ${palette.border};">
+            ${isLeftAccent ? `<div class="accent-bar" style="background-color:${palette.border}"></div>` : ''}
 
-                                // Divider
-                                {
-                                    type: 'div',
-                                    props: {
-                                        style: {
-                                            width: '820px',
-                                            height: '1px',
-                                            backgroundColor: palette.border,
-                                            opacity: 0.25,
-                                            marginBottom: '25px',
-                                        }
-                                    }
-                                },
+            <div class="header">
+                <div class="title-en">${esc(body.poem_title_en)}</div>
+                <div class="title-ur">${esc(body.poem_title_ur)}</div>
+            </div>
 
-                                // English lines
-                                {
-                                    type: 'div',
-                                    props: {
-                                        style: {
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            textAlign: 'center',
-                                            width: '820px',
-                                        },
-                                        children: englishLines.map(line => ({
-                                            type: 'div',
-                                            props: {
-                                                style: {
-                                                    fontFamily: 'Cinzel',
-                                                    fontSize: `${englishFontSize}px`,
-                                                    lineHeight: englishLineHeight,
-                                                    color: palette.englishText,
-                                                    fontStyle: 'italic',
-                                                },
-                                                children: String(line)
-                                            }
-                                        }))
-                                    }
-                                }
-                            ]
-                        }
-                    },
+            <div class="content">
+                <div class="urdu-block">${urduLinesHtml}</div>
+                <div class="divider"></div>
+                <div class="english-block">${englishLinesHtml}</div>
+            </div>
 
-                    brandingFooter(palette, `STANZA ${body.stanza_no} OF ${body.total_stanzas}`)
-
-                ].filter(Boolean)
-            }
-        },
-        { width: 1080, height: 1080, fonts: FONTS }
-    );
+            ${brandingFooterHtml(palette, `STANZA ${body.stanza_no} OF ${body.total_stanzas}`)}
+        </div>
+    </body>
+    </html>
+    `;
 }
 
-async function renderHookCard(body) {
+function renderHookHtml(body) {
     const palette = palettes[body.palette_index ?? 0] || palettes[0];
     const layout = body.layout || layouts[body.layout_index ?? 0] || 'centered';
-    const { isLeftAccent, borderWidth } = getLayoutProps(layout, palette);
+    const { isLeftAccent, borderWidth } = getLayoutProps(layout);
     const hookText = String(body.hook || '');
     const hookFontSize = calcHookFontSize(hookText);
-    const hookTextShaped = reshapeUrdu(hookText);
 
-    return await satori(
-        {
-            type: 'div',
-            props: {
-                style: {
-                    width: '1080px',
-                    height: '1080px',
-                    backgroundColor: palette.bg,
-                    border: `${borderWidth}px solid ${palette.border}`,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    position: 'relative',
-                    boxSizing: 'border-box',
-                },
-                children: [
-                    isLeftAccent ? accentBar(palette) : null,
+    return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="utf-8" />
+    <style>
+        ${fontFaceCss()}
+        ${baseStyles()}
+        .hook-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 880px;
+            text-align: center;
+            direction: rtl;
+        }
+        .hook-text {
+            font-family: 'NotoArabic';
+            font-size: ${hookFontSize}px;
+            line-height: 2.0;
+            font-weight: 700;
+            color: ${palette.text};
+            direction: rtl;
+            text-align: center;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="card" style="background-color:${palette.bg}; border:${borderWidth}px solid ${palette.border};">
+            ${isLeftAccent ? `<div class="accent-bar" style="background-color:${palette.border}"></div>` : ''}
+            <div style="height:1px;"></div>
+            <div class="hook-wrap">
+                <div class="hook-text">${esc(hookText)}</div>
+            </div>
+            ${brandingFooterHtml(palette, null)}
+        </div>
+    </body>
+    </html>
+    `;
+}
 
-                    // Spacer top
-                    { type: 'div', props: { style: { height: '1px' } } },
+let browserPromise = null;
+async function getBrowser() {
+    if (!browserPromise) {
+        browserPromise = puppeteer.launch({
+            args: chromium.args,
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless,
+            defaultViewport: { width: 1080, height: 1080 },
+        });
+    }
+    return browserPromise;
+}
 
-                    // Hook text centered
-                    {
-                        type: 'div',
-                        props: {
-                            style: {
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexGrow: 1,
-                                width: '880px',
-                                textAlign: 'center',
-                                direction: 'rtl',
-                            },
-                            children: [{
-                                type: 'div',
-                                props: {
-                                    style: {
-                                        fontFamily: 'NotoArabic',
-                                        fontSize: `${hookFontSize}px`,
-                                        lineHeight: 2.0,
-                                        fontWeight: 700,
-                                        color: palette.text,
-                                        direction: 'rtl',
-                                        unicodeBidi: 'bidi-override',
-                                        textAlign: 'center',
-                                    },
-                                    children: hookTextShaped
-                                }
-                            }]
-                        }
-                    },
-
-                    brandingFooter(palette, null)
-
-                ].filter(Boolean)
-            }
-        },
-        { width: 1080, height: 1080, fonts: FONTS }
-    );
+async function renderCardToPng(html) {
+    const browser = await getBrowser();
+    const page = await browser.newPage();
+    try {
+        await page.setViewport({ width: 1080, height: 1080 });
+        await page.setContent(html, { waitUntil: 'networkidle0' });
+        const png = await page.screenshot({ type: 'png' });
+        return png;
+    } finally {
+        await page.close();
+    }
 }
 
 export async function GET() {
@@ -427,20 +374,8 @@ export async function POST(request) {
         const body = await request.json();
         const itemType = body.item_type || 'stanza';
 
-        let svg;
-        if (itemType === 'hook') {
-            svg = await renderHookCard(body);
-        } else {
-            svg = await renderStanzaCard(body);
-        }
-
-        if (!svg || svg.length === 0) {
-            throw new Error('Satori returned empty SVG');
-        }
-
-        const png = await sharp(Buffer.from(svg))
-            .png()
-            .toBuffer();
+        const html = itemType === 'hook' ? renderHookHtml(body) : renderStanzaHtml(body);
+        const png = await renderCardToPng(html);
 
         return new NextResponse(png, {
             status: 200,
