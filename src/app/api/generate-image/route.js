@@ -16,7 +16,8 @@ const FONT_DATA = {
     cinzelRegular: fontBase64('Cinzel-Regular.ttf'),
     cinzelBold: fontBase64('Cinzel-Bold.ttf'),
     montserrat: fontBase64('Montserrat-SemiBold.ttf'),
-    notoArabic: fontBase64('NotoNaskhArabic.ttf'),
+    notoNastaliqRegular: fontBase64('NotoNastaliqUrdu-Regular.ttf'),
+    notoNastaliqBold: fontBase64('NotoNastaliqUrdu-Bold.ttf'),
 };
 
 const palettes = [
@@ -98,13 +99,13 @@ function fontFaceCss() {
         }
         @font-face {
             font-family: 'NotoArabic';
-            src: url(data:font/ttf;base64,${FONT_DATA.notoArabic}) format('truetype');
+            src: url(data:font/ttf;base64,${FONT_DATA.notoNastaliqRegular}) format('truetype');
             font-weight: 400;
             font-style: normal;
         }
         @font-face {
             font-family: 'NotoArabic';
-            src: url(data:font/ttf;base64,${FONT_DATA.notoArabic}) format('truetype');
+            src: url(data:font/ttf;base64,${FONT_DATA.notoNastaliqBold}) format('truetype');
             font-weight: 700;
             font-style: normal;
         }
