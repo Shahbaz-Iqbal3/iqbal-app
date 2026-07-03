@@ -174,7 +174,7 @@ function baseStyles() {
 
 function renderStanzaHtml(body) {
     const palette = palettes[body.palette_index ?? 0] || palettes[0];
-    const layout = body.layout || layouts[body.layout_index ?? 0] || 'centered';
+    const layout = 'centered';
     const { isLeftAccent, borderWidth } = getLayoutProps(layout);
 
     const urduLines = Array.isArray(body.urdu_lines) ? body.urdu_lines : [];
@@ -289,7 +289,7 @@ function renderStanzaHtml(body) {
 
 function renderHookHtml(body) {
     const palette = palettes[body.palette_index ?? 0] || palettes[0];
-    const layout = body.layout || layouts[body.layout_index ?? 0] || 'centered';
+    const layout = 'centered';
     const { isLeftAccent, borderWidth } = getLayoutProps(layout);
     const hookText = String(body.hook || '');
     const hookFontSize = calcHookFontSize(hookText);
