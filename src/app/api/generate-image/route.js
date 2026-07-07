@@ -216,8 +216,8 @@ function renderStanzaHtml(body) {
             margin-left: ${isLeftAccent ? '90px' : '0px'};
         }
         .title-en {
-            font-family: 'Cinzel';
-            font-size: 16px;
+            font-family: 'Cinzel', serif, 'NotoArabic', sans-serif;
+            font-size: 21px;
             font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
